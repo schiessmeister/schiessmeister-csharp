@@ -1,3 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+using schiessmeister_csharp.Domain.Repositories;
+using schiessmeister_csharp.Domain.Repositories.MySqlRepositories;
+using schiessmeister_csharp.Infrastructure.MySqlRepositories;
+
 namespace schiessmeister_csharp;
 
 public class Program {
@@ -5,18 +10,22 @@ public class Program {
     public static void Main(string[] args) {
         var builder = WebApplication.CreateBuilder(args);
 
+        
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
+        
         // Add services to the container.
         builder.Services.AddControllers();
 
-        if (builder.Environment.IsDevelopment()) {
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-
-            // TODO Add Mock Repo Singletons, e.g.
-            // builder.Services.AddSingleton<ILectureRepository, MockLectureRepository>();
-        }
-
+        
+        var connectionString = builder.Configuration.GetConnectionString("mySqlDb");
+        builder.Services.AddDbContext<MySqlDbContext>(options => 
+            options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))        
+        );
+        
+        
+        builder.Services.AddScoped<IOrganizerRepository, MySqlOrganizerRepository>();
+        
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
