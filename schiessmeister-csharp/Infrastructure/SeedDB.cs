@@ -10,7 +10,6 @@ public class SeedDB
     public static async void Initialize(IServiceProvider serviceProvider)
     {
         var context = serviceProvider.GetRequiredService<MySqlDbContext>();
-        var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
         string[] roles = new string[] { "User" };
 
@@ -27,8 +26,6 @@ public class SeedDB
                 });
             }
         }
-
-        context.Database.EnsureCreated();
     }
 
 

@@ -46,7 +46,7 @@ public class AuthenticateController : ControllerBase
     {
         var userExists = await userManager.FindByNameAsync(model.Username);
         if (userExists != null)
-            return StatusCode(StatusCodes.Status400BadRequest, new ResponseDTO { Status = "Error", Message = "User already exists!" });
+            return BadRequest("User already exists!" );
 
         ApplicationUser user = new ApplicationUser()
         {
@@ -55,18 +55,21 @@ public class AuthenticateController : ControllerBase
             UserName = model.Username
         };
         IdentityResult result = await userManager.CreateAsync(user, model.Password);
-
+    
+        if(result.Errors.Count()!=0)
+            return BadRequest(result.Errors);
+            
         foreach (var er in result.Errors)
         {
-            Console.WriteLine(er);
+            Console.WriteLine(er.Description);
         }
     
         if (!result.Succeeded)
-            return StatusCode(StatusCodes.Status400BadRequest, new ResponseDTO { Status = "Error", Message = "User creation failed! Please check user details and try again." });
+            return BadRequest("User creation failed! Please check user details and try again.");
 
         await userManager.AddToRoleAsync(user, "User");
 
-        return Ok(new ResponseDTO { Status = "Success", Message = "User created successfully!" });
+        return Ok("User created successfully!");
     }
 
 }
