@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using schiessmeister_csharp.Domain.Models;
 using schiessmeister_csharp.Domain.Repositories;
 
 namespace schiessmeister_csharp.API.Controller;
 
+[Authorize(Roles = "User")]
 [ApiController]
 [Route("/api/organizer")]
 public class OrganizerController:ControllerBase {
