@@ -4,51 +4,43 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace schiessmeister_csharp.Migrations
-{
+namespace schiessmeister_csharp.Migrations {
     /// <inheritdoc />
-    public partial class init : Migration
-    {
+    public partial class init : Migration {
         /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
+        protected override void Up(MigrationBuilder migrationBuilder) {
             migrationBuilder.AlterDatabase()
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "Organizers",
-                columns: table => new
-                {
+                columns: table => new {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_Organizers", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "Shooters",
-                columns: table => new
-                {
+                columns: table => new {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_Shooters", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "Competitions",
-                columns: table => new
-                {
+                columns: table => new {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(type: "longtext", nullable: false)
@@ -58,8 +50,7 @@ namespace schiessmeister_csharp.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     OrganizerId = table.Column<int>(type: "int", nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_Competitions", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Competitions_Organizers_OrganizerId",
@@ -72,8 +63,7 @@ namespace schiessmeister_csharp.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Participations",
-                columns: table => new
-                {
+                columns: table => new {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Class = table.Column<string>(type: "longtext", nullable: false)
@@ -84,8 +74,7 @@ namespace schiessmeister_csharp.Migrations
                     ShooterId = table.Column<int>(type: "int", nullable: false),
                     CompetitionId = table.Column<int>(type: "int", nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_Participations", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Participations_Competitions_CompetitionId",
@@ -119,8 +108,7 @@ namespace schiessmeister_csharp.Migrations
         }
 
         /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
+        protected override void Down(MigrationBuilder migrationBuilder) {
             migrationBuilder.DropTable(
                 name: "Participations");
 
