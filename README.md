@@ -1,3 +1,3 @@
-# Schießmeister C#
+# Schiessmeister C#
 
-All rights reserved © Schießmeister 2025
+All rights reserved © Schiessmeister 2025
