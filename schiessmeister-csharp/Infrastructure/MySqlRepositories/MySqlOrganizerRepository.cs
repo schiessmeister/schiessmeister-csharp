@@ -1,56 +1,54 @@
 using Microsoft.EntityFrameworkCore;
 using schiessmeister_csharp.Domain.Models;
 using schiessmeister_csharp.Domain.Repositories;
-using schiessmeister_csharp.Domain.Repositories.MySqlRepositories;
 
 namespace schiessmeister_csharp.Infrastructure.MySqlRepositories;
 
 public class MySqlOrganizerRepository : IOrganizerRepository {
-    
-    private readonly MySqlDbContext _context;
-    
-    public MySqlOrganizerRepository(MySqlDbContext mysqlDbContext)
-    {
-        _context = mysqlDbContext;
-    }
-    
-    public async Task<List<Organizer>> FindAllAsync() {
-        return await _context.Organizers.ToListAsync();
+    private readonly MySqlDbContext _db;
+
+    public MySqlOrganizerRepository(MySqlDbContext dbContext) {
+        _db = dbContext;
     }
 
-    public async Task<Organizer> AddAsync(Organizer entity) {
-        await _context.Organizers.AddAsync(entity);
-        await _context.SaveChangesAsync();
-        return entity;
+    public async Task<List<Organizer>> FindAllAsync() {
+        return await _db.Organizers.ToListAsync();
     }
 
     public async Task<Organizer?> FindByIdAsync(int id) {
-        return await _context.Organizers.FindAsync(id);
+        return await _db.Organizers.FindAsync(id);
+    }
+
+    public async Task<Organizer> AddAsync(Organizer entity) {
+        await _db.Organizers.AddAsync(entity);
+
+        await _db.SaveChangesAsync();
+
+        return entity;
     }
 
     public async Task<Organizer> UpdateAsync(Organizer entity) {
-        var existingEntity = await _context.Organizers.FindAsync(entity.Id);
-        if(existingEntity==null)
-            throw new ArgumentException("Organizer doesn't exist");
-        
-        _context.Entry(existingEntity).CurrentValues.SetValues(entity);
-        
-        _context.Organizers.Update(entity);
-        
-        await _context.SaveChangesAsync();
-        
-        return existingEntity;
+        var existing = await _db.Organizers.FindAsync(entity.Id);
+
+        if (existing == null)
+            throw new InvalidOperationException("Organizer does not exist");
+
+        _db.Entry(existing).CurrentValues.SetValues(entity);
+        _db.Organizers.Update(existing);
+
+        await _db.SaveChangesAsync();
+
+        return existing;
     }
 
     public async Task DeleteAsync(Organizer entity) {
+        var existing = await _db.Organizers.FindAsync(entity.Id);
 
-        var existing = await _context.Organizers.FindAsync(entity.Id);
-        
         if (existing == null)
-            throw new ArgumentException("Organizer not found");
-        
-        _context.Organizers.Remove(entity);
+            throw new InvalidOperationException("Organizer does not exist");
 
-        await _context.SaveChangesAsync();
+        _db.Organizers.Remove(existing);
+
+        await _db.SaveChangesAsync();
     }
 }

@@ -4,7 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+<<<<<<< HEAD
 using schiessmeister_csharp.Domain.Repositories.MySqlRepositories;
+=======
+using schiessmeister_csharp.Infrastructure.MySqlRepositories;
+>>>>>>> main
 
 #nullable disable
 
@@ -17,11 +21,16 @@ namespace schiessmeister_csharp.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+<<<<<<< HEAD
                 .HasAnnotation("ProductVersion", "8.0.14")
+=======
+                .HasAnnotation("ProductVersion", "8.0.2")
+>>>>>>> main
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
+<<<<<<< HEAD
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -49,6 +58,9 @@ namespace schiessmeister_csharp.Migrations
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+=======
+            modelBuilder.Entity("schiessmeister_csharp.Domain.Models.Competition", b =>
+>>>>>>> main
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -56,6 +68,7 @@ namespace schiessmeister_csharp.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+<<<<<<< HEAD
                     b.Property<string>("ClaimType")
                         .HasColumnType("longtext");
 
@@ -74,6 +87,30 @@ namespace schiessmeister_csharp.Migrations
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+=======
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("OrganizerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrganizerId");
+
+                    b.ToTable("Competitions");
+                });
+
+            modelBuilder.Entity("schiessmeister_csharp.Domain.Models.Organizer", b =>
+>>>>>>> main
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -81,6 +118,7 @@ namespace schiessmeister_csharp.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+<<<<<<< HEAD
                     b.Property<string>("ClaimType")
                         .HasColumnType("longtext");
 
@@ -163,16 +201,17 @@ namespace schiessmeister_csharp.Migrations
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("OrganizerId")
-                        .HasColumnType("int");
+=======
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrganizerId");
-
-                    b.ToTable("Competition");
+                    b.ToTable("Organizers");
                 });
 
-            modelBuilder.Entity("schiessmeister_csharp.Domain.Models.Organizer", b =>
+            modelBuilder.Entity("schiessmeister_csharp.Domain.Models.Participation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -180,12 +219,61 @@ namespace schiessmeister_csharp.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Class")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("CompetitionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderNb")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Results")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("ShooterId")
+>>>>>>> main
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+<<<<<<< HEAD
+                    b.HasIndex("OrganizerId");
+
+                    b.ToTable("Competition");
+                });
+
+            modelBuilder.Entity("schiessmeister_csharp.Domain.Models.Organizer", b =>
+=======
+                    b.HasIndex("CompetitionId");
+
+                    b.HasIndex("ShooterId");
+
+                    b.ToTable("Participations");
+                });
+
+            modelBuilder.Entity("schiessmeister_csharp.Domain.Models.Shooter", b =>
+>>>>>>> main
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+<<<<<<< HEAD
                     b.Property<string>("name")
+=======
+                    b.Property<string>("Name")
+>>>>>>> main
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
+<<<<<<< HEAD
                     b.ToTable("Organizers");
                 });
 
@@ -302,19 +390,64 @@ namespace schiessmeister_csharp.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+=======
+                    b.ToTable("Shooters");
                 });
 
             modelBuilder.Entity("schiessmeister_csharp.Domain.Models.Competition", b =>
                 {
+                    b.HasOne("schiessmeister_csharp.Domain.Models.Organizer", "Organizer")
+                        .WithMany("Competitions")
+                        .HasForeignKey("OrganizerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Organizer");
+                });
+
+            modelBuilder.Entity("schiessmeister_csharp.Domain.Models.Participation", b =>
+                {
+                    b.HasOne("schiessmeister_csharp.Domain.Models.Competition", "Competition")
+                        .WithMany("Participations")
+                        .HasForeignKey("CompetitionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("schiessmeister_csharp.Domain.Models.Shooter", "Shooter")
+                        .WithMany("Participations")
+                        .HasForeignKey("ShooterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Competition");
+
+                    b.Navigation("Shooter");
+>>>>>>> main
+                });
+
+            modelBuilder.Entity("schiessmeister_csharp.Domain.Models.Competition", b =>
+                {
+<<<<<<< HEAD
                     b.HasOne("schiessmeister_csharp.Domain.Models.Organizer", null)
                         .WithMany("Competitions")
                         .HasForeignKey("OrganizerId");
+=======
+                    b.Navigation("Participations");
+>>>>>>> main
                 });
 
             modelBuilder.Entity("schiessmeister_csharp.Domain.Models.Organizer", b =>
                 {
                     b.Navigation("Competitions");
                 });
+<<<<<<< HEAD
+=======
+
+            modelBuilder.Entity("schiessmeister_csharp.Domain.Models.Shooter", b =>
+                {
+                    b.Navigation("Participations");
+                });
+>>>>>>> main
 #pragma warning restore 612, 618
         }
     }

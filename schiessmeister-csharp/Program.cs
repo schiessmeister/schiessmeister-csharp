@@ -6,7 +6,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using schiessmeister_csharp.API.Services;
 using schiessmeister_csharp.Domain.Repositories;
-using schiessmeister_csharp.Domain.Repositories.MySqlRepositories;
 using schiessmeister_csharp.Identity;
 using schiessmeister_csharp.Infrastructure;
 using schiessmeister_csharp.Infrastructure.MySqlRepositories;
@@ -17,47 +16,36 @@ public class Program {
 
     public static void Main(string[] args) {
         var builder = WebApplication.CreateBuilder(args);
-        var connectionString = builder.Configuration.GetConnectionString("mySqlDb");
-        
-        builder.Services.AddCors(options =>
-        {
+
+        builder.Services.AddControllers();
+
+        #region Auth
+
+        builder.Services.AddCors(options => {
             options.AddPolicy(name: "OpenCorsPolicy",
-                policy =>
-                {
+                policy => {
                     policy.AllowAnyOrigin();
                     policy.AllowAnyMethod();
                     policy.AllowAnyHeader();
                 });
         });
-        
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
-        
-        builder.Services.AddControllers();
 
-      
-        builder.Services.AddDbContext<MySqlDbContext>(options => 
-            options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))        
-        );
-        
-        builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => 
-            { options.SignIn.RequireConfirmedAccount = false;
-                options.User.RequireUniqueEmail = true;
-                options.Password.RequireDigit = false;
-                options.Password.RequiredLength = 6;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequireLowercase = false; }).AddEntityFrameworkStores<MySqlDbContext>();
-        
-        builder.Services.AddAuthentication(a => 
-        {
+        builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => {
+            options.SignIn.RequireConfirmedAccount = false;
+            options.User.RequireUniqueEmail = true;
+            options.Password.RequireDigit = false;
+            options.Password.RequiredLength = 6;
+            options.Password.RequireNonAlphanumeric = false;
+            options.Password.RequireUppercase = false;
+            options.Password.RequireLowercase = false;
+        }).AddEntityFrameworkStores<MySqlDbContext>();
+
+        builder.Services.AddAuthentication(a => {
             a.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             a.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             a.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        }).AddJwtBearer(opt =>
-        {
-            opt.TokenValidationParameters = new TokenValidationParameters​
-            {
+        }).AddJwtBearer(opt => {
+            opt.TokenValidationParameters = new TokenValidationParameters​ {
                 IssuerSigningKey = new SymmetricSecurityKey(
                     Encoding.ASCII.GetBytes(
                         builder.Configuration.GetSection("JwtSettings")["Secret"]!
@@ -68,19 +56,25 @@ public class Program {
                 ValidateLifetime = true
             };
         });
-        
-        builder.Services.AddSwaggerGen(opt =>
-        {
-            opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme() {
-                Name = "Authorization",
-                Type = SecuritySchemeType.ApiKey,
-                Scheme = "Bearer",
-                BearerFormat = "JWT",
-                In = ParameterLocation.Header,
-                Description = "Enter 'Bearer' [space] and then your valid token in the text input below.\r\n\r\nExample: \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\""
-            });
-            opt.AddSecurityRequirement(new OpenApiSecurityRequirement
-            {
+
+        builder.Services.AddScoped<ITokenService, JwtService>();
+
+        #endregion Auth
+
+        if (builder.Environment.IsDevelopment()) {
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen(opt => {
+                opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme() {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "Enter 'Bearer' [space] and then your valid token in the text input below.\r\n\r\nExample: \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\""
+                });
+                opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
                 {
                     new OpenApiSecurityScheme
                     {
@@ -92,15 +86,21 @@ public class Program {
                     }, new string[] {}
                 }
             });
-        });
+            });
+        }
 
-        
+        string? connString = builder.Configuration.GetConnectionString("timon.mysql"); // Change according to current machine.
+        if (connString == null) return;
+
+        builder.Services.AddDbContext<MySqlDbContext>(options => options.UseMySql(connString, ServerVersion.AutoDetect(connString)));
+
         builder.Services.AddScoped<IOrganizerRepository, MySqlOrganizerRepository>();
-        builder.Services.AddScoped<ITokenService, JwtService>();
+        builder.Services.AddScoped<ICompetitionRepository, MySqlCompetitionRepository>();
+        builder.Services.AddScoped<IShooterRepository, MySqlShooterRepository>();
 
         var app = builder.Build();
 
-        SeedDB.Initialize( app.Services.GetRequiredService<IServiceProvider>().CreateScope().ServiceProvider );
+        SeedDB.Initialize(app.Services.GetRequiredService<IServiceProvider>().CreateScope().ServiceProvider);
 
         if (app.Environment.IsDevelopment()) {
             app.UseSwagger();
@@ -108,10 +108,10 @@ public class Program {
         }
 
         app.UseHttpsRedirection();
-        
+
         app.UseAuthentication();
         app.UseAuthorization();
-        
+
         app.MapControllers();
         app.Run();
     }
