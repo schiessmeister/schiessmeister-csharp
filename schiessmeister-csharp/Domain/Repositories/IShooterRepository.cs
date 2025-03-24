@@ -2,4 +2,6 @@
 
 namespace schiessmeister_csharp.Domain.Repositories;
 
-public interface IShooterRepository : IRepository<Shooter> { }
+public interface IShooterRepository : IRepository<Shooter> {
+
+}
