@@ -1,9 +1,11 @@
 ﻿namespace schiessmeister_csharp.Api.Controller;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using schiessmeister_csharp.Domain.Models;
 using schiessmeister_csharp.Domain.Repositories;
 
+[Authorize]  // Authentifizierung für alle Routen notwendig
 [ApiController]
 [Route("api/shooter")] // Basisroute für alle Enpunkte
 public class ShooterController : ControllerBase {
@@ -16,6 +18,7 @@ public class ShooterController : ControllerBase {
     //GET: api/shooter - Ruft alle Shooter aus der Datenbank ab
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [AllowAnonymous]  // Alle dürfen Shooter-Liste abrufen
     public async Task<ActionResult<IEnumerable<Shooter>>> GetAll() {
         return Ok(await _repository.FindAllAsync());
     }
@@ -34,7 +37,6 @@ public class ShooterController : ControllerBase {
 
     // POST: api/shooter - Erstellt einen neuen Shooter
     [HttpPost]
-    //[Authorize] // Nur authentifizierte Benutzer können hinzufügen ??
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<Shooter>> Create(Shooter shooter) {
@@ -47,7 +49,6 @@ public class ShooterController : ControllerBase {
 
     // PUT: api/shooter/{id} - Aktualisiert einen bestehenden Shooter
     [HttpPut("{id}")]
-    //[Authorize] // Authentifizierung erforderlich??
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
