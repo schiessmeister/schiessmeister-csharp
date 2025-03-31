@@ -9,7 +9,6 @@ public static class ClaimsPrincipalExtensions {
             throw new ArgumentNullException(nameof(principal));
 
         var claim = principal.FindFirst(ClaimTypes.NameIdentifier);
-
         if (claim == null)
             throw new InvalidOperationException("User ID claim not found");
 
