@@ -1,18 +1,18 @@
 using schiessmeister_csharp.API.Services;
-using schiessmeister_csharp.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using schiessmeister_csharp.Domain.Models.Auth;
+using schiessmeister_csharp.Domain.Models;
 
-namespace schiessmeister_csharp.API.Controller;
+namespace schiessmeister_csharp.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
 public class AuthenticateController : ControllerBase {
-    private readonly UserManager<ApplicationUser> userManager;
+    private readonly UserManager<AppUser> userManager;
     private readonly ITokenService tokenService;
 
-    public AuthenticateController(UserManager<ApplicationUser> userManager, IConfiguration _, ITokenService tokenService) {
+    public AuthenticateController(UserManager<AppUser> userManager, IConfiguration _, ITokenService tokenService) {
         this.userManager = userManager;
         this.tokenService = tokenService;
     }
@@ -35,7 +35,7 @@ public class AuthenticateController : ControllerBase {
         if (userExists != null)
             return BadRequest("User already exists!");
 
-        ApplicationUser user = new ApplicationUser() {
+        AppUser user = new AppUser() {
             Email = model.Email,
             SecurityStamp = Guid.NewGuid().ToString(),
             UserName = model.Username
@@ -53,6 +53,7 @@ public class AuthenticateController : ControllerBase {
             return BadRequest("User creation failed! Please check user details and try again.");
 
         await userManager.AddToRoleAsync(user, "User");
+        await userManager.AddToRoleAsync(user, "Organizer");
 
         return Ok("User created successfully!");
     }

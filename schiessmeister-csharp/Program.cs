@@ -5,8 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using schiessmeister_csharp.API.Services;
+using schiessmeister_csharp.Domain.Models;
 using schiessmeister_csharp.Domain.Repositories;
-using schiessmeister_csharp.Identity;
 using schiessmeister_csharp.Infrastructure;
 using schiessmeister_csharp.Infrastructure.MySqlRepositories;
 
@@ -30,7 +30,7 @@ public class Program {
                 });
         });
 
-        builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => {
+        builder.Services.AddIdentity<AppUser, IdentityRole>(options => {
             options.SignIn.RequireConfirmedAccount = false;
             options.User.RequireUniqueEmail = true;
             options.Password.RequireDigit = false;
@@ -45,7 +45,7 @@ public class Program {
             a.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             a.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         }).AddJwtBearer(opt => {
-            opt.TokenValidationParameters = new TokenValidationParameters​ {
+            opt.TokenValidationParameters = new TokenValidationParameters {
                 IssuerSigningKey = new SymmetricSecurityKey(
                     Encoding.ASCII.GetBytes(
                         builder.Configuration.GetSection("JwtSettings")["Secret"]!
@@ -94,7 +94,7 @@ public class Program {
 
         builder.Services.AddDbContext<MySqlDbContext>(options => options.UseMySql(connString, ServerVersion.AutoDetect(connString)));
 
-        builder.Services.AddScoped<IOrganizerRepository, MySqlOrganizerRepository>();
+        builder.Services.AddScoped<IAppUserRepository, MySqlAppUserRepository>();
         builder.Services.AddScoped<ICompetitionRepository, MySqlCompetitionRepository>();
         builder.Services.AddScoped<IShooterRepository, MySqlShooterRepository>();
 

@@ -1,6 +1,6 @@
-namespace schiessmeister_csharp.Domain.Models.Auth;
-
 using System.ComponentModel.DataAnnotations;
+
+namespace schiessmeister_csharp.Domain.Models.Auth;
 
 public class LoginDTO {
 

@@ -2,7 +2,7 @@
 using schiessmeister_csharp.Domain.Models;
 using schiessmeister_csharp.Domain.Repositories;
 
-namespace schiessmeister_csharp.Api.Controller;
+namespace schiessmeister_csharp.API.Controllers;
 
 [ApiController]
 [Route("api/competition")]

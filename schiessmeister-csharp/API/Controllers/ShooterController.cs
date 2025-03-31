@@ -1,8 +1,8 @@
-﻿namespace schiessmeister_csharp.Api.Controller;
-
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using schiessmeister_csharp.Domain.Models;
 using schiessmeister_csharp.Domain.Repositories;
+
+namespace schiessmeister_csharp.API.Controllers;
 
 [ApiController]
 [Route("api/shooter")]
