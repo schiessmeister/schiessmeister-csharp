@@ -17,7 +17,18 @@ public class Program {
     public static void Main(string[] args) {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddControllers();
+        builder.Services.AddControllers()
+            .AddJsonOptions(options => {
+                options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+            });
+
+        builder.Services.AddCors(options => {
+            options.AddPolicy("ReactAppPolicy", builder => {
+                builder.WithOrigins("http://localhost:3000")
+                       .AllowAnyHeader()
+                       .AllowAnyMethod();
+            });
+        });
 
         #region Auth
 
@@ -108,6 +119,7 @@ public class Program {
         }
 
         app.UseHttpsRedirection();
+        app.UseCors("ReactAppPolicy");
 
         app.UseAuthentication();
         app.UseAuthorization();

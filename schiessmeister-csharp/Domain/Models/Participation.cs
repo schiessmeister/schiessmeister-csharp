@@ -9,7 +9,7 @@ public class Participation : IEntity {
     public int OrderNb { get; set; }
 
     public int ShooterId { get; set; }
-    public Shooter Shooter { get; set; } = null!;
+    public Shooter? Shooter { get; set; }
     public int CompetitionId { get; set; }
-    public Competition Competition { get; set; } = null!;
+    public Competition? Competition { get; set; }
 }

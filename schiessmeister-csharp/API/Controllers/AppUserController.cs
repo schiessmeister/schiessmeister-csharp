@@ -5,28 +5,26 @@ using schiessmeister_csharp.Domain.Repositories;
 
 namespace schiessmeister_csharp.API.Controllers;
 
-[Authorize(Roles = "User")]
 [ApiController]
 [Route("api/users")]
+[Authorize(Roles = "User")]
+[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+[ProducesResponseType(StatusCodes.Status403Forbidden)]
 public class AppUserController : ControllerBase {
-    private readonly IAppUserRepository _repository;
+    private readonly IAppUserRepository _users;
+    private readonly ICompetitionRepository _competitions;
 
-    public AppUserController(IAppUserRepository repository) {
-        _repository = repository;
+    public AppUserController(IAppUserRepository users, ICompetitionRepository competitions) {
+        _users = users;
+        _competitions = competitions;
     }
 
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<AppUser>>> GetAll() {
-        return Ok(await _repository.FindAllAsync());
-    }
-
-    [HttpGet]
+    [Route("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [Route("{id}")]
     public async Task<ActionResult<AppUser>> GetUser(int id) {
-        var organizer = await _repository.FindByIdAsync(id);
+        var organizer = await _users.FindByIdAsync(id);
 
         if (organizer == null)
             return NotFound();
@@ -34,48 +32,26 @@ public class AppUserController : ControllerBase {
         return Ok(organizer);
     }
 
-    [HttpPut]
-    [Route("{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<AppUser>> UpdateUser(int id, AppUser organizer) {
-        var existingOrganizer = await _repository.FindByIdAsync(id);
-
-        if (existingOrganizer == null)
-            return NotFound();
-
-        existingOrganizer.UserName = organizer.UserName;
-        await _repository.UpdateAsync(existingOrganizer);
-
-        return Ok(existingOrganizer);
-    }
-
     [HttpDelete]
     [Route("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<AppUser>> DeleteUser(int id) {
-        var existingOrganizer = await _repository.FindByIdAsync(id);
+        var existingOrganizer = await _users.FindByIdAsync(id);
         if (existingOrganizer == null)
             return NotFound();
 
-        await _repository.DeleteAsync(existingOrganizer);
+        await _users.DeleteAsync(existingOrganizer);
 
         return Ok();
     }
 
-    [Authorize(Roles = "Organizer")]
     [HttpGet]
     [Route("{id}/competitions")]
+    [Authorize(Roles = "Organizer")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<IEnumerable<Competition>>> GetCompetitionsByOrganizer(int id) {
-        var organizer = await _repository.FindByIdAsync(id);
-        if (organizer == null)
-            return NotFound();
-
-        List<Competition> competitions = organizer.Competitions ?? [];
-
-        return Ok(competitions);
+        return Ok(await _competitions.FindByOrganizerIdAsync(id));
     }
 }

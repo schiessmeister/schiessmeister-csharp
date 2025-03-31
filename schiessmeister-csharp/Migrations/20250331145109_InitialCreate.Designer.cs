@@ -12,7 +12,7 @@ using schiessmeister_csharp.Infrastructure.MySqlRepositories;
 namespace schiessmeister_csharp.Migrations
 {
     [DbContext(typeof(MySqlDbContext))]
-    [Migration("20250331132051_InitialCreate")]
+    [Migration("20250331145109_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
