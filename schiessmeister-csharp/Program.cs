@@ -22,22 +22,15 @@ public class Program {
                 options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
             });
 
-        builder.Services.AddCors(options => {
-            options.AddPolicy("ReactAppPolicy", builder => {
-                builder.WithOrigins("http://localhost:3000")
-                       .AllowAnyHeader()
-                       .AllowAnyMethod();
-            });
-        });
-
         #region Auth
 
         builder.Services.AddCors(options => {
             options.AddPolicy(name: "OpenCorsPolicy",
                 policy => {
-                    policy.AllowAnyOrigin();
-                    policy.AllowAnyMethod();
-                    policy.AllowAnyHeader();
+                    policy.WithOrigins("http://localhost:3000")
+                          .AllowAnyMethod()
+                          .AllowAnyHeader()
+                          .AllowCredentials();
                 });
         });
 
@@ -118,8 +111,8 @@ public class Program {
             app.UseSwaggerUI();
         }
 
+        app.UseCors("OpenCorsPolicy");
         app.UseHttpsRedirection();
-        app.UseCors("ReactAppPolicy");
 
         app.UseAuthentication();
         app.UseAuthorization();

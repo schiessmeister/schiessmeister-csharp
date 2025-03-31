@@ -1,18 +1,17 @@
-import { useState } from "react";
-
 const CreateCompetition = () => {
-
-  return (
-    <div>
-      <h2>Wettbewerb erstellen</h2>
-        <input type="name" placeholder="Name" onChange={(e) => setName(e.target.value)} />
-        <input type="standort" placeholder="Standort" onChange={(e) => setStandort(e.target.value)} />
-      <div>Datum</div>
-        <input type="datetime-local" placeholder="Datum" onChange={(e) => setDatum(e.target.value)} />
-      <button type="submit">Speichern</button>
-      <button type="reset" class="button--secondary">Abbrechen</button>
-    </div>
-  );
+	return (
+		<main>
+			<h2>Wettbewerb erstellen</h2>
+			<input type="name" placeholder="Name" onChange={(e) => setName(e.target.value)} />
+			<input type="standort" placeholder="Standort" onChange={(e) => setStandort(e.target.value)} />
+			<div>Datum</div>
+			<input type="datetime-local" placeholder="Datum" onChange={(e) => setDatum(e.target.value)} />
+			<button type="submit">Speichern</button>
+			<button type="reset" class="button--secondary">
+				Abbrechen
+			</button>
+		</main>
+	);
 };
 
 export default CreateCompetition;

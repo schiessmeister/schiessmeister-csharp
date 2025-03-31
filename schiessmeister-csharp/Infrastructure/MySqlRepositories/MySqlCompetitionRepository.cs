@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using schiessmeister_csharp.Domain.Models;
 using schiessmeister_csharp.Domain.Repositories;
-using System.Runtime.InteropServices;
 
 namespace schiessmeister_csharp.Infrastructure.MySqlRepositories;
 

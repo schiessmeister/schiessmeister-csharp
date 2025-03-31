@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using schiessmeister_csharp.Infrastructure.MySqlRepositories;
 
 namespace schiessmeister_csharp.Infrastructure;

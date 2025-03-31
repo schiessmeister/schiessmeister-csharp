@@ -1,24 +1,84 @@
-import { useState } from "react";
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { API_BASE_URL } from '../utils/api';
 
 const Register = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+	const [username, setUsername] = useState('');
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+	const [error, setError] = useState('');
+	const { login } = useAuth();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Registrierung mit:", email, password);
-  };
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		setError('');
 
-  return (
-    <div>
-      <h2>Registrieren</h2>
-      <form onSubmit={handleSubmit}>
-        <input type="email" placeholder="E-Mail" value={email} onChange={(e) => setEmail(e.target.value)} />
-        <input type="password" placeholder="Passwort" value={password} onChange={(e) => setPassword(e.target.value)} />
-        <button type="submit">Registrieren</button>
-      </form>
-    </div>
-  );
+		try {
+			const response = await fetch(API_BASE_URL + '/authenticate/register', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ username, email, password })
+			});
+
+			if (!response.ok) {
+				const errorData = await response.json();
+				throw new Error(errorData || 'Registration failed');
+			}
+
+			// After successful registration, automatically log in
+			const loginResponse = await fetch(API_BASE_URL + '/authenticate/login', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ username, password })
+			});
+
+			if (!loginResponse.ok) {
+				throw new Error('Registration successful but login failed');
+			}
+
+			const data = await loginResponse.json();
+			login(data.token);
+		} catch (error) {
+			setError(error.message || 'Registration failed');
+			console.error('Registration error:', error);
+		}
+	};
+
+	return (
+		<main>
+			<div>
+				<h2>Create your account</h2>
+			</div>
+
+			<form onSubmit={handleSubmit}>
+				<div>
+					<label htmlFor="username">Username</label>
+					<input id="username" name="username" type="text" required placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
+				</div>
+				<div>
+					<label htmlFor="email">Email</label>
+					<input id="email" name="email" type="email" required placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+				</div>
+				<div>
+					<label htmlFor="password">Password</label>
+					<input id="password" name="password" type="password" required placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+				</div>
+
+				{error && <div>{error}</div>}
+
+				<button type="submit">Register</button>
+			</form>
+
+			<div>
+				<Link to="/login">Already have an account? Sign in</Link>
+			</div>
+		</main>
+	);
 };
 
 export default Register;

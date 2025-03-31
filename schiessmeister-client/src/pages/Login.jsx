@@ -1,24 +1,65 @@
-import { useState } from "react";
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { API_BASE_URL } from '../utils/api';
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+	const [username, setUsername] = useState('');
+	const [password, setPassword] = useState('');
+	const [error, setError] = useState('');
+	const { login } = useAuth();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Login mit:", email, password);
-  };
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		setError('');
 
-  return (
-    <div>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <input type="email" placeholder="E-Mail" value={email} onChange={(e) => setEmail(e.target.value)} />
-        <input type="password" placeholder="Passwort" value={password} onChange={(e) => setPassword(e.target.value)} />
-        <button type="submit">Login</button>
-      </form>
-    </div>
-  );
+		try {
+			const response = await fetch(API_BASE_URL + '/authenticate/login', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ username, password })
+			});
+
+			if (!response.ok) {
+				throw new Error('Login failed');
+			}
+
+			const data = await response.json();
+			login(data.token);
+		} catch (error) {
+			setError('Invalid username or password');
+			console.error('Login error:', error);
+		}
+	};
+
+	return (
+		<main>
+			<div>
+				<h2>Sign in to your account</h2>
+			</div>
+
+			<form onSubmit={handleSubmit}>
+				<div>
+					<label htmlFor="username">Username</label>
+					<input id="username" name="username" type="text" required placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
+				</div>
+				<div>
+					<label htmlFor="password">Password</label>
+					<input id="password" name="password" type="password" required placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+				</div>
+
+				{error && <div>{error}</div>}
+
+				<button type="submit">Sign in</button>
+			</form>
+
+			<div>
+				<Link to="/register">Don't have an account? Register</Link>
+			</div>
+		</main>
+	);
 };
 
 export default Login;
