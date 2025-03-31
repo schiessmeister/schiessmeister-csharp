@@ -23,9 +23,9 @@ public class JwtService : ITokenService {
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         ];
 
-        IList<UserRole> userRoles = (IList<UserRole>)await userManager.GetRolesAsync(user);
-        foreach (UserRole userRole in userRoles) {
-            authClaims.Add(new Claim(ClaimTypes.Role, userRole.ToString()));
+        IList<string> userRoles = await userManager.GetRolesAsync(user);
+        foreach (string userRole in userRoles) {
+            authClaims.Add(new Claim(ClaimTypes.Role, userRole));
         }
 
         var authSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration.GetSection("JwtSettings")["Secret"]!));

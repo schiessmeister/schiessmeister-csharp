@@ -30,7 +30,7 @@ public class Program {
                 });
         });
 
-        builder.Services.AddIdentity<AppUser, IdentityRole>(options => {
+        builder.Services.AddIdentity<AppUser, IdentityRole<int>>(options => {
             options.SignIn.RequireConfirmedAccount = false;
             options.User.RequireUniqueEmail = true;
             options.Password.RequireDigit = false;

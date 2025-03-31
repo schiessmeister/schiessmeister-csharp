@@ -41,7 +41,7 @@ public class AppUserController : ControllerBase {
     public async Task<ActionResult<AppUser>> UpdateUser(int id, AppUser organizer) {
         var existingOrganizer = await _repository.FindByIdAsync(id);
 
-        if (existingOrganizer == null || existingOrganizer.OrganizerProfile == null)
+        if (existingOrganizer == null)
             return NotFound();
 
         existingOrganizer.UserName = organizer.UserName;
@@ -54,7 +54,7 @@ public class AppUserController : ControllerBase {
     [Route("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<AppUser>> DeleteOrganizer(int id) {
+    public async Task<ActionResult<AppUser>> DeleteUser(int id) {
         var existingOrganizer = await _repository.FindByIdAsync(id);
         if (existingOrganizer == null)
             return NotFound();
@@ -64,16 +64,17 @@ public class AppUserController : ControllerBase {
         return Ok();
     }
 
+    [Authorize(Roles = "Organizer")]
     [HttpGet]
     [Route("{id}/competitions")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<IEnumerable<Competition>>> GetCompetitionsByOrganizer(int id) {
         var organizer = await _repository.FindByIdAsync(id);
-        if (organizer == null || organizer.OrganizerProfile == null)
+        if (organizer == null)
             return NotFound();
 
-        List<Competition> competitions = organizer.OrganizerProfile.Competitions ?? [];
+        List<Competition> competitions = organizer.Competitions ?? [];
 
         return Ok(competitions);
     }

@@ -8,17 +8,16 @@ public class SeedDB {
 
     public static async void Initialize(IServiceProvider serviceProvider) {
         var context = serviceProvider.GetRequiredService<MySqlDbContext>();
+        var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
 
-        string[] roles = [
+        string[] roles = {
             "User",
             "Organizer"
-        ];
-
-        RoleStore<IdentityRole> roleStore = new(context);
+        };
 
         foreach (string role in roles) {
             if (!context.Roles.Any(r => r.Name == role)) {
-                await roleStore.CreateAsync(new IdentityRole() {
+                await roleManager.CreateAsync(new IdentityRole<int>() {
                     Name = role,
                     NormalizedName = role.ToUpper()
                 });
