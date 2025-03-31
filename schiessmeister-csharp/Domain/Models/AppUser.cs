@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using schiessmeister_csharp.Domain.Repositories;
 
 namespace schiessmeister_csharp.Domain.Models;

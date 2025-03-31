@@ -6,7 +6,7 @@ using schiessmeister_csharp.Domain.Models;
 
 namespace schiessmeister_csharp.API.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/authenticate")]
 [ApiController]
 public class AuthenticateController : ControllerBase {
     private readonly UserManager<AppUser> userManager;
@@ -21,9 +21,11 @@ public class AuthenticateController : ControllerBase {
     [Route("login")]
     public async Task<ActionResult<TokenDTO>> Login([FromBody] LoginDTO model) {
         var user = await userManager.FindByNameAsync(model.Username);
+
         if (user != null && await userManager.CheckPasswordAsync(user, model.Password)) {
             return Ok(await tokenService.CreateTokenAsync(user));
         }
+
         return Unauthorized();
     }
 
@@ -40,6 +42,7 @@ public class AuthenticateController : ControllerBase {
             SecurityStamp = Guid.NewGuid().ToString(),
             UserName = model.Username
         };
+
         IdentityResult result = await userManager.CreateAsync(user, model.Password);
 
         if (result.Errors.Count() != 0)

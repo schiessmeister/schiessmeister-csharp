@@ -7,24 +7,23 @@ namespace schiessmeister_csharp.API.Controllers;
 [ApiController]
 [Route("api/shooter")]
 public class ShooterController : ControllerBase {
-    private readonly IShooterRepository _repository;
+    private readonly IShooterRepository _shooters;
 
-    public ShooterController(IShooterRepository repository) {
-        _repository = repository;
+    public ShooterController(IShooterRepository shooters) {
+        _shooters = shooters;
     }
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<Shooter>>> GetAll() {
-        return Ok(await _repository.FindAllAsync());
+        return Ok(await _shooters.FindAllAsync());
     }
 
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<Shooter>> Get(int id) {
-        var shooter = await _repository.FindByIdAsync(id);
-
+        var shooter = await _shooters.FindByIdAsync(id);
         if (shooter == null)
             return NotFound();
 
@@ -34,8 +33,8 @@ public class ShooterController : ControllerBase {
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<Shooter>> Create([FromBody] Shooter shooter) {
-        var newShooter = await _repository.AddAsync(shooter);
+    public async Task<ActionResult<Shooter>> Create(Shooter shooter) {
+        var newShooter = await _shooters.AddAsync(shooter);
 
         return CreatedAtAction(nameof(Get), new { id = newShooter.Id }, newShooter);
     }
@@ -43,27 +42,21 @@ public class ShooterController : ControllerBase {
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<Shooter>> Update(int id, [FromBody] Shooter shooter) {
-        var existingShooter = await _repository.FindByIdAsync(id);
-
-        if (existingShooter == null)
-            return NotFound();
-
+    public async Task<ActionResult<Shooter>> Update(int id, Shooter shooter) {
         shooter.Id = id;
 
-        return Ok(await _repository.UpdateAsync(shooter));
+        return Ok(await _shooters.UpdateAsync(shooter));
     }
 
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int id) {
-        var shooter = await _repository.FindByIdAsync(id);
-
+        var shooter = await _shooters.FindByIdAsync(id);
         if (shooter == null)
             return NotFound();
 
-        await _repository.DeleteAsync(shooter);
+        await _shooters.DeleteAsync(shooter);
 
         return Ok();
     }

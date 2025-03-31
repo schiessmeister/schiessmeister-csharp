@@ -1,32 +1,31 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using schiessmeister_csharp.API.Extensions;
 using schiessmeister_csharp.Domain.Models;
 using schiessmeister_csharp.Domain.Repositories;
-using System.Runtime.InteropServices;
 
 namespace schiessmeister_csharp.API.Controllers;
 
 [ApiController]
 [Route("api/competition")]
 public class CompetitionController : ControllerBase {
-    private readonly ICompetitionRepository _repository;
-    private readonly IAppUserRepository _userRepository;
+    private readonly ICompetitionRepository _competitions;
 
-    public CompetitionController(ICompetitionRepository repository, IAppUserRepository userRepository) {
-        _repository = repository;
-        _userRepository = userRepository;
+    public CompetitionController(ICompetitionRepository competitions) {
+        _competitions = competitions;
     }
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<Competition>>> GetAll() {
-        return Ok(await _repository.FindAllAsync());
+        return Ok(await _competitions.FindAllAsync());
     }
 
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<Competition>> Get(int id) {
-        var comp = await _repository.FindByIdAsync(id);
+        var comp = await _competitions.FindByIdAsync(id);
 
         if (comp == null)
             return NotFound();
@@ -35,38 +34,47 @@ public class CompetitionController : ControllerBase {
     }
 
     [HttpPost]
+    [Authorize(Roles = "Organizer")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<Competition>> Post(Competition comp) {
-        var newComp = await _repository.AddAsync(comp);
+        if (User.GetUserId() != comp.OrganizerId)
+            return Forbid();
+
+        var newComp = await _competitions.AddAsync(comp);
 
         return CreatedAtAction(nameof(Get), new { id = newComp.Id }, newComp);
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "Organizer")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<Competition>> Put(int id, Competition competition) {
-        var oldCompetition = await _repository.FindByIdAsync(id);
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult<Competition>> Put(int id, Competition comp) {
+        if (User.GetUserId() != comp.OrganizerId)
+            return Forbid();
 
-        if (oldCompetition == null)
-            return NotFound();
+        comp.Id = id;
 
-        competition.Id = oldCompetition.Id;
-
-        return Ok(await _repository.UpdateAsync(competition));
+        return Ok(await _competitions.UpdateAsync(comp));
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Organizer")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Delete(int id) {
-        var competition = await _repository.FindByIdAsync(id);
-
-        if (competition == null)
+        var comp = await _competitions.FindByIdAsync(id);
+        if (comp == null)
             return NotFound();
 
-        await _repository.DeleteAsync(competition);
+        if (User.GetUserId() != comp.OrganizerId)
+            return Forbid();
+
+        await _competitions.DeleteAsync(comp);
 
         return Ok();
     }
