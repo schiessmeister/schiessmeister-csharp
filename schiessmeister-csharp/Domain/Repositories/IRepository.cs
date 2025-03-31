@@ -1,4 +1,4 @@
-﻿namespace schiessmeister_csharp.Domain.Repositories;
+namespace schiessmeister_csharp.Domain.Repositories;
 
 public interface IRepository<TEntity> where TEntity : IEntity {
 

@@ -1,4 +1,4 @@
-﻿using schiessmeister_csharp.Domain.Repositories;
+using schiessmeister_csharp.Domain.Repositories;
 
 namespace schiessmeister_csharp.Domain.Models;
 
@@ -9,7 +9,7 @@ public class Competition : IEntity {
     public string Location { get; set; }
 
     public int OrganizerId { get; set; }
-    public Organizer Organizer { get; set; } = null!;
+    public AppUser? Organizer { get; set; }
 
-    public List<Participation> Participations { get; set; } = [];
+    public List<Participation>? Participations { get; set; } = [];
 }

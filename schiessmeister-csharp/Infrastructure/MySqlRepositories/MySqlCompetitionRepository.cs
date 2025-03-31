@@ -16,7 +16,11 @@ public class MySqlCompetitionRepository : ICompetitionRepository {
     }
 
     public async Task<Competition?> FindByIdAsync(int id) {
-        return await _db.Competitions.FindAsync(id);
+        return await _db.Competitions.Include(c => c.Participations).FirstOrDefaultAsync(c => c.Id == id);
+    }
+
+    public async Task<List<Competition>> FindByOrganizerIdAsync(int organizerId) {
+        return await _db.Competitions.Where(c => c.OrganizerId == organizerId).ToListAsync();
     }
 
     public async Task<Competition> AddAsync(Competition entity) {
