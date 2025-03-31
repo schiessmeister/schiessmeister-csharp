@@ -25,7 +25,7 @@ public class CompetitionController : ControllerBase {
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<Competition>> Get(int id) {
-        var comp = await _competitions.FindByIdAsync(id);
+        var comp = await _competitions.FindByIdFullAsync(id);
 
         if (comp == null)
             return NotFound();
@@ -37,6 +37,7 @@ public class CompetitionController : ControllerBase {
     [Authorize(Roles = "Organizer")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<Competition>> Post(Competition comp) {
         if (User.GetUserId() != comp.OrganizerId)
@@ -51,6 +52,7 @@ public class CompetitionController : ControllerBase {
     [Authorize(Roles = "Organizer")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<Competition>> Put(int id, Competition comp) {
         if (User.GetUserId() != comp.OrganizerId)
@@ -58,13 +60,16 @@ public class CompetitionController : ControllerBase {
 
         comp.Id = id;
 
-        return Ok(await _competitions.UpdateAsync(comp));
+        await _competitions.UpdateAsync(comp);
+
+        return Ok(await _competitions.FindByIdFullAsync(id));
     }
 
     [HttpDelete("{id}")]
     [Authorize(Roles = "Organizer")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Delete(int id) {
         var comp = await _competitions.FindByIdAsync(id);

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using schiessmeister_csharp.Domain.Models;
 using schiessmeister_csharp.Domain.Repositories;
 
@@ -31,8 +32,10 @@ public class ShooterController : ControllerBase {
     }
 
     [HttpPost]
+    [Authorize(Roles = "User")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<Shooter>> Create(Shooter shooter) {
         var newShooter = await _shooters.AddAsync(shooter);
 
@@ -40,8 +43,10 @@ public class ShooterController : ControllerBase {
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "User")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<Shooter>> Update(int id, Shooter shooter) {
         shooter.Id = id;
 
@@ -49,8 +54,10 @@ public class ShooterController : ControllerBase {
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "User")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Delete(int id) {
         var shooter = await _shooters.FindByIdAsync(id);
         if (shooter == null)
