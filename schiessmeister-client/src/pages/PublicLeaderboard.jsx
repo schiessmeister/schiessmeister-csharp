@@ -147,9 +147,7 @@ const PublicLeaderboard = () => {
 			</div>
 
 			<h3>Gesamtrangliste</h3>
-			<div className="leaderboard">
-				<LeaderboardGrid participations={sortedParticipations} />
-			</div>
+			<div className="leaderboard">{sortedParticipations.length > 0 ? <LeaderboardGrid participations={sortedParticipations} /> : <div className="empty-leaderboard">Keine Teilnehmer</div>}</div>
 
 			{SHOOTING_CLASSES.map(({ key, value }) => (
 				<div key={key} className="class-leaderboard">
