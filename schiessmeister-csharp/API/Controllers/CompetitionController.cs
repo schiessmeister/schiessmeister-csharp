@@ -65,7 +65,7 @@ public class CompetitionController : ControllerBase {
 
     [HttpDelete("{id}")]
     [Authorize(Roles = "Organizer")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -79,7 +79,7 @@ public class CompetitionController : ControllerBase {
 
         await _competitions.DeleteAsync(comp);
 
-        return Ok();
+        return NoContent();
     }
 
     [HttpGet("{id}/subscribe")]

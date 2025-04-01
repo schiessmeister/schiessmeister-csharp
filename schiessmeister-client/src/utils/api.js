@@ -23,6 +23,11 @@ export const createApi = (token = null, handleUnauthorized = null) => {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
 
+		// Handle 204 No Content responses
+		if (response.status === 204) {
+			return null;
+		}
+
 		return response.json();
 	};
 

@@ -102,3 +102,30 @@
 .reset-btn {
 	margin: 0 !important;
 }
+
+.shooting-class-select {
+	margin: 1rem 0;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin-block: 40px;
+}
+
+.shooting-class-select label {
+	font-weight: 500;
+}
+
+.shooting-class-select select {
+	padding: 0.5rem;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-size: 1rem;
+	background-color: white;
+	cursor: pointer;
+}
+
+.shooting-class-select select:focus {
+	outline: none;
+	border-color: #007bff;
+	box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}

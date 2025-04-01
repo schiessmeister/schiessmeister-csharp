@@ -50,8 +50,13 @@ const PublicLeaderboard = () => {
 				await connectionRef.current.start();
 				console.log('SignalR Connected!');
 
-				// Subscribe to the competition
-				await connectionRef.current.invoke(subscriptionDetails.methodName, parseInt(id));
+				// Only subscribe if we're in the Connected state
+				if (connectionRef.current.state === signalR.HubConnectionState.Connected) {
+					await connectionRef.current.invoke(subscriptionDetails.methodName, parseInt(id));
+					console.log('Successfully subscribed to competition updates');
+				} else {
+					console.warn('Connection not in Connected state, skipping subscription');
+				}
 			} catch (err) {
 				console.error('SignalR setup error:', err);
 				setError('Failed to establish live connection');

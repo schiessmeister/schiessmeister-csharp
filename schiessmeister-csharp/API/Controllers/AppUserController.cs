@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using schiessmeister_csharp.API.Extensions;
 using schiessmeister_csharp.Domain.Models;
@@ -38,7 +39,7 @@ public class AppUserController : ControllerBase {
 
     [HttpDelete]
     [Route("{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<AppUser>> DeleteUser(int id) {
@@ -52,7 +53,7 @@ public class AppUserController : ControllerBase {
 
         await _users.DeleteAsync(user);
 
-        return Ok();
+        return NoContent();
     }
 
     [HttpGet]

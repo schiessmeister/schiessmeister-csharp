@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getCompetition } from '../api/apiClient';
+import { getCompetition, deleteCompetition } from '../api/apiClient';
 import { useAuth } from '../context/AuthContext';
 import '../styles/CompetitionOverview.css';
 
@@ -24,6 +24,18 @@ const CompetitionOverview = () => {
 
 		fetchCompetition();
 	}, [id, auth]);
+
+	const handleDeleteCompetition = async () => {
+		if (window.confirm('Möchten Sie diesen Wettbewerb wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.')) {
+			try {
+				await deleteCompetition(id, auth);
+				navigate('/');
+			} catch (err) {
+				setError('Fehler beim Löschen des Wettbewerbs');
+				console.error(err);
+			}
+		}
+	};
 
 	if (error) return <div className="error">{error}</div>;
 	if (!competition) return <div>Loading...</div>;
@@ -63,9 +75,14 @@ const CompetitionOverview = () => {
 			<button className="button" onClick={() => navigate(`/participantsList/${id}`)}>
 				Teilnehmer verwalten
 			</button>
-			<button className="button button--secondary" onClick={() => navigate(`/`)}>
-				Zurück
-			</button>
+			<div className="competition-actions">
+				<button className="button button--secondary" onClick={() => navigate(`/`)}>
+					Zurück
+				</button>
+				<button className="button button--secondary delete-button" onClick={handleDeleteCompetition}>
+					Wettbewerb löschen
+				</button>
+			</div>
 		</main>
 	);
 };

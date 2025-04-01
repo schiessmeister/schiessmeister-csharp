@@ -4,6 +4,12 @@ import { getCompetition, updateCompetition } from '../api/apiClient';
 import { useAuth } from '../context/AuthContext';
 import '../styles/ResultsInput.css';
 
+const SHOOTING_CLASSES = [
+	{ key: 'MEN', value: 'Männer' },
+	{ key: 'WOMEN', value: 'Frauen' },
+	{ key: 'SENIORS', value: 'Senioren' }
+];
+
 const ResultsInput = () => {
 	const { competitionId, participationId } = useParams();
 	const navigate = useNavigate();
@@ -11,6 +17,7 @@ const ResultsInput = () => {
 	const [participation, setParticipation] = useState(null);
 	const [results, setResults] = useState([]);
 	const [error, setError] = useState(null);
+	const [shootingClass, setShootingClass] = useState('MEN');
 	const auth = useAuth();
 
 	useEffect(() => {
@@ -20,6 +27,9 @@ const ResultsInput = () => {
 				setCompetition(data);
 				const participation = data.participations.find((p) => p.id === parseInt(participationId));
 				setParticipation(participation);
+				if (participation.class) {
+					setShootingClass(participation.class);
+				}
 
 				let tempResults = JSON.parse(participation.results || '[]');
 				if (!Array.isArray(tempResults)) tempResults = [];
@@ -45,9 +55,17 @@ const ResultsInput = () => {
 
 	const handleSave = async () => {
 		try {
+			const updatedParticipation = {
+				...participation,
+				results: JSON.stringify(results),
+				class: shootingClass
+			};
+
+			const updatedParticipations = competition.participations.map((p) => (p.id === parseInt(participationId) ? updatedParticipation : p));
+
 			const updatedCompetition = {
 				...competition,
-				participations: competition.participations.map((p) => (p.id === parseInt(participationId) ? { ...p, results: JSON.stringify(results) } : p))
+				participations: updatedParticipations
 			};
 			await updateCompetition(competitionId, updatedCompetition, auth);
 			navigate(`/competition/${competitionId}`);
@@ -89,6 +107,17 @@ const ResultsInput = () => {
 				<button className="button button--danger" onClick={handleRemoveLast} disabled={results.length === 0}>
 					Letzte Zahl löschen
 				</button>
+
+				<div className="shooting-class-select">
+					<label htmlFor="shootingClass">Schützenklasse:</label>
+					<select id="shootingClass" value={shootingClass} onChange={(e) => setShootingClass(e.target.value)}>
+						{SHOOTING_CLASSES.map(({ key, value }) => (
+							<option key={key} value={key}>
+								{value}
+							</option>
+						))}
+					</select>
+				</div>
 			</div>
 
 			<div className="action-buttons">

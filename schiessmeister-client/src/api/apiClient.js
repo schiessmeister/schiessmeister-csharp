@@ -42,3 +42,13 @@ export const createShooter = async (name, auth) => {
 	const api = createApi(auth.token, auth.handleUnauthorized);
 	return api.post('/shooter', { name });
 };
+
+export const deleteUser = async (userId, auth) => {
+	const api = createApi(auth.token, auth.handleUnauthorized);
+	return api.delete(`/users/${userId}`);
+};
+
+export const deleteCompetition = async (id, auth) => {
+	const api = createApi(auth.token, auth.handleUnauthorized);
+	return api.delete(`/competition/${id}`);
+};

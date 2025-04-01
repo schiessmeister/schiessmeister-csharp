@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { getCompetitions } from '../api/apiClient';
+import { getCompetitions, deleteUser } from '../api/apiClient';
 import { useAuth } from '../context/AuthContext';
 import '../styles/Home.css';
 
@@ -28,6 +28,18 @@ const Home = () => {
 		navigate(`/competition/${id}`);
 	};
 
+	const handleDeleteAccount = async () => {
+		if (window.confirm('Möchten Sie Ihr Konto wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.')) {
+			try {
+				await deleteUser(auth.userId, auth);
+				auth.logout();
+			} catch (err) {
+				setError('Fehler beim Löschen des Kontos');
+				console.error(err);
+			}
+		}
+	};
+
 	if (error) return <div className="error">{error}</div>;
 
 	return (
@@ -49,6 +61,15 @@ const Home = () => {
 			<Link to="/createcompetition">
 				<button className="button">Erstellen</button>
 			</Link>
+
+			<div className="account-actions">
+				<button className="button button--secondary logout-button" onClick={auth.logout}>
+					Abmelden
+				</button>
+				<button className="button button--secondary delete-button" onClick={handleDeleteAccount}>
+					Konto löschen
+				</button>
+			</div>
 		</main>
 	);
 };
