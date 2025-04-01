@@ -1,14 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using schiessmeister_csharp.Domain.Models;
 using schiessmeister_csharp.Domain.Repositories;
+using schiessmeister_csharp.API.Services;
 
 namespace schiessmeister_csharp.Infrastructure.MySqlRepositories;
 
 public class MySqlCompetitionRepository : ICompetitionRepository {
     private readonly MySqlDbContext _db;
+    private readonly ICompetitionNotificationService _notificationService;
 
-    public MySqlCompetitionRepository(MySqlDbContext dbContext) {
+    public MySqlCompetitionRepository(
+        MySqlDbContext dbContext,
+        ICompetitionNotificationService notificationService) {
         _db = dbContext;
+        _notificationService = notificationService;
     }
 
     public async Task<List<Competition>> FindAllAsync() {
@@ -64,7 +69,13 @@ public class MySqlCompetitionRepository : ICompetitionRepository {
 
         await _db.SaveChangesAsync();
 
-        return existing;
+        // Load the complete competition with participations and shooters for notification
+        var updatedCompetition = await FindByIdFullAsync(entity.Id);
+        if (updatedCompetition != null) {
+            await _notificationService.NotifyCompetitionUpdated(updatedCompetition);
+        }
+
+        return updatedCompetition ?? existing;
     }
 
     public async Task DeleteAsync(Competition entity) {

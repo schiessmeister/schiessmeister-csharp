@@ -9,6 +9,7 @@ using schiessmeister_csharp.Domain.Models;
 using schiessmeister_csharp.Domain.Repositories;
 using schiessmeister_csharp.Infrastructure;
 using schiessmeister_csharp.Infrastructure.MySqlRepositories;
+using schiessmeister_csharp.API.Hubs;
 
 namespace schiessmeister_csharp;
 
@@ -101,6 +102,8 @@ public class Program {
         builder.Services.AddScoped<IAppUserRepository, MySqlAppUserRepository>();
         builder.Services.AddScoped<ICompetitionRepository, MySqlCompetitionRepository>();
         builder.Services.AddScoped<IShooterRepository, MySqlShooterRepository>();
+        builder.Services.AddSignalR();
+        builder.Services.AddScoped<ICompetitionNotificationService, CompetitionNotificationService>();
 
         var app = builder.Build();
 
@@ -118,6 +121,7 @@ public class Program {
         app.UseAuthorization();
 
         app.MapControllers();
+        app.MapHub<CompetitionHub>("/hubs/competition");
         app.Run();
     }
 }

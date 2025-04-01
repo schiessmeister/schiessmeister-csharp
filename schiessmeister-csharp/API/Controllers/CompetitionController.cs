@@ -60,9 +60,7 @@ public class CompetitionController : ControllerBase {
 
         comp.Id = id;
 
-        await _competitions.UpdateAsync(comp);
-
-        return Ok(await _competitions.FindByIdFullAsync(id));
+        return Ok(await _competitions.UpdateAsync(comp));
     }
 
     [HttpDelete("{id}")]
@@ -82,5 +80,22 @@ public class CompetitionController : ControllerBase {
         await _competitions.DeleteAsync(comp);
 
         return Ok();
+    }
+
+    [HttpGet("{id}/subscribe")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> GetSubscriptionInfo(int id) {
+        var comp = await _competitions.FindByIdAsync(id);
+
+        if (comp == null)
+            return NotFound();
+
+        // Return connection info for the client
+        return Ok(new {
+            hubUrl = "/hubs/competition",
+            competitionId = id,
+            methodName = "SubscribeToCompetition"
+        });
     }
 }
