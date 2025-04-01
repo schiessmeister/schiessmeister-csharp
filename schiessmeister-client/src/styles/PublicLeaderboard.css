@@ -68,12 +68,10 @@ h3 {
 
 .class-leaderboard {
 	margin-top: 1rem;
-	border-top: 1px solid #eee;
 }
 
 .class-leaderboard h3 {
 	color: #333;
-	margin-bottom: 1rem;
 }
 
 .empty-leaderboard {

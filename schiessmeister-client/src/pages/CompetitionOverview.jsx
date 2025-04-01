@@ -58,7 +58,7 @@ const CompetitionOverview = () => {
 				Live Rangliste
 			</button>
 			<div className="participants-list">
-				<h3>Teilnehmer</h3>
+				<h3>Nächste Teilnehmer</h3>
 				<div className="participants-grid">
 					{competition.participations.map((participation) => (
 						<div key={participation.id} className="participant-item">
