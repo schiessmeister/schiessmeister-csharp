@@ -1,7 +1,5 @@
 .public-leaderboard {
-	max-width: 800px;
-	margin: 0 auto;
-	padding: 2rem;
+	padding: 3rem 1rem;
 }
 
 .competition-details {
@@ -15,7 +13,7 @@
 	background-color: white;
 	border-radius: 8px;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-	padding: 1rem;
+	padding: 0.5rem;
 }
 
 .leaderboard-grid {
@@ -27,7 +25,7 @@
 	display: grid;
 	grid-template-columns: 60px 1fr 100px;
 	align-items: center;
-	padding: 1rem;
+	padding: 5px 15px;
 	background-color: #f8f9fa;
 	border-radius: 4px;
 	transition: transform 0.2s;
@@ -66,4 +64,23 @@ h2 {
 h3 {
 	color: #444;
 	margin-bottom: 1rem;
+}
+
+.class-leaderboard {
+	margin-top: 1rem;
+	border-top: 1px solid #eee;
+}
+
+.class-leaderboard h3 {
+	color: #333;
+	margin-bottom: 1rem;
+}
+
+.empty-leaderboard {
+	text-align: center;
+	padding: 2rem;
+	background-color: #f8f9fa;
+	border-radius: 8px;
+	color: #6c757d;
+	font-style: italic;
 }

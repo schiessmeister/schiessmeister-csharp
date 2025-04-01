@@ -2,13 +2,8 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getCompetition, updateCompetition } from '../api/apiClient';
 import { useAuth } from '../context/AuthContext';
+import { SHOOTING_CLASSES } from '../constants/shootingClasses';
 import '../styles/ResultsInput.css';
-
-const SHOOTING_CLASSES = [
-	{ key: 'MEN', value: 'Männer' },
-	{ key: 'WOMEN', value: 'Frauen' },
-	{ key: 'SENIORS', value: 'Senioren' }
-];
 
 const ResultsInput = () => {
 	const { competitionId, participationId } = useParams();
