@@ -7,8 +7,13 @@ export const getCompetitions = async (auth) => {
 	return api.get(`/users/${auth.userId}/competitions`);
 };
 
-export const getCompetition = async (id, auth) => {
-	const api = createApi(auth.token, auth.handleUnauthorized);
+export const getCompetition = async (id, auth = null) => {
+	if (auth) {
+		const api = createApi(auth.token, auth.handleUnauthorized);
+		return api.get(`/competition/${id}`);
+	}
+	// For public access without auth
+	const api = createApi();
 	return api.get(`/competition/${id}`);
 };
 

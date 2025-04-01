@@ -6,6 +6,7 @@ import CreateCompetition from './pages/CreateCompetition';
 import CompetitionOverview from './pages/CompetitionOverview';
 import ResultsInput from './pages/ResultsInput';
 import Logout from './pages/Logout';
+import PublicLeaderboard from './pages/PublicLeaderboard';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import { StrictMode } from 'react';
@@ -22,6 +23,7 @@ export default function App() {
 					<Route path="login" element={<Login />} />
 					<Route path="register" element={<Register />} />
 					<Route path="logout" element={<Logout />} />
+					<Route path="public-leaderboard/:id" element={<PublicLeaderboard />} />
 
 					{/* Protected routes */}
 					<Route element={<ProtectedRoute />}>

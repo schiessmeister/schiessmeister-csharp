@@ -10,6 +10,8 @@ using schiessmeister_csharp.Domain.Repositories;
 using schiessmeister_csharp.Infrastructure;
 using schiessmeister_csharp.Infrastructure.MySqlRepositories;
 using schiessmeister_csharp.API.Hubs;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.SignalR;
 
 namespace schiessmeister_csharp;
 
@@ -102,8 +104,17 @@ public class Program {
         builder.Services.AddScoped<IAppUserRepository, MySqlAppUserRepository>();
         builder.Services.AddScoped<ICompetitionRepository, MySqlCompetitionRepository>();
         builder.Services.AddScoped<IShooterRepository, MySqlShooterRepository>();
-        builder.Services.AddSignalR();
         builder.Services.AddScoped<ICompetitionNotificationService, CompetitionNotificationService>();
+
+        builder.Services.AddSignalR(options => {
+            options.EnableDetailedErrors = true;
+            options.MaximumReceiveMessageSize = 102400; // 100 KB
+            options.ClientTimeoutInterval = TimeSpan.FromSeconds(60);
+            options.KeepAliveInterval = TimeSpan.FromSeconds(15);
+        }).AddJsonProtocol(options => {
+            options.PayloadSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+            options.PayloadSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+        });
 
         var app = builder.Build();
 

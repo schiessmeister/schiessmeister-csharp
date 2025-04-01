@@ -95,7 +95,8 @@ public class CompetitionController : ControllerBase {
         return Ok(new {
             hubUrl = "/hubs/competition",
             competitionId = id,
-            methodName = "SubscribeToCompetition"
+            methodName = "SubscribeToCompetition",
+            eventName = "CompetitionUpdated"
         });
     }
 }

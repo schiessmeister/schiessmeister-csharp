@@ -1,6 +1,7 @@
-export const API_BASE_URL = 'https://localhost:7087/api';
+export const BASE_URL = 'https://localhost:7087';
+export const API_BASE_URL = BASE_URL + '/api';
 
-export const createApi = (token, handleUnauthorized) => {
+export const createApi = (token = null, handleUnauthorized = null) => {
 	const fetchWithAuth = async (endpoint, options = {}) => {
 		const headers = {
 			'Content-Type': 'application/json',
@@ -13,7 +14,7 @@ export const createApi = (token, handleUnauthorized) => {
 			headers
 		});
 
-		if (response.status === 401) {
+		if (response.status === 401 && handleUnauthorized) {
 			handleUnauthorized();
 			throw new Error('Unauthorized');
 		}

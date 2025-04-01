@@ -42,6 +42,9 @@ const CompetitionOverview = () => {
 					<strong>Teilnehmer:</strong> {competition.participations.length}
 				</p>
 			</div>
+			<button className="button button--secondary" onClick={() => window.open(`/public-leaderboard/${id}`, '_blank')}>
+				Live Rangliste
+			</button>
 			<div className="participants-list">
 				<h3>Teilnehmer</h3>
 				<div className="participants-grid">
