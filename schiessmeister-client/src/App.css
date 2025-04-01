@@ -11,6 +11,8 @@
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+
+	--color-main: #1e5631;
 }
 
 body {
@@ -23,38 +25,49 @@ body {
 
 h1,
 h2,
-h3 {
-	color: #1e5631;
+h3,
+h4,
+h5,
+h6 {
+	color: var(--color-main);
+	margin: 0;
+	margin-block: 30px 10px;
 }
 
-button {
+a {
+	margin-block: 10px;
+	display: block;
+	color: black;
+}
+
+.button {
 	color: white;
 	width: 100%;
 	padding: 10px;
-	background-color: #1e5631;
-	border: 2px solid #1e5631;
+	background-color: var(--color-main);
+	border: 2px solid var(--color-main);
 	border-radius: 5px;
-	margin-top: 10px;
 }
 
-button:hover {
-	border-color: 2px solid #1e5631;
+.button:hover {
+	border-color: 2px solid var(--color-main);
 }
-button:focus,
-button:focus-visible {
+
+.button:focus,
+.button:focus-visible {
 	outline: 4px auto -webkit-focus-ring-color;
 }
 
 .button--secondary {
 	background-color: white;
-	color: #1e5631;
+	color: var(--color-main);
 	margin: 10px 0px;
 }
 
 .button--tertiary {
 	background-color: white;
-	color: #000000;
-	border: 1px solid #1e5631;
+	color: black;
+	border: 1px solid var(--color-main);
 	border-radius: 5px;
 	margin: 10px 0px;
 }
@@ -63,6 +76,6 @@ input {
 	width: calc(100% - 20px);
 	padding: 10px;
 	margin: 10px 0;
-	border: 1px solid #1e5631;
+	border: 1px solid var(--color-main);
 	border-radius: 5px;
 }

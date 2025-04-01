@@ -36,15 +36,14 @@ const Login = () => {
 
 	return (
 		<main>
-			<div>
-				<h2>Sign in to your account</h2>
-			</div>
+			<h2>Sign in to your account</h2>
 
 			<form onSubmit={handleSubmit}>
 				<div>
 					<label htmlFor="username">Username</label>
 					<input id="username" name="username" type="text" required placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
 				</div>
+
 				<div>
 					<label htmlFor="password">Password</label>
 					<input id="password" name="password" type="password" required placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
@@ -52,12 +51,12 @@ const Login = () => {
 
 				{error && <div>{error}</div>}
 
-				<button type="submit">Sign in</button>
+				<button class="button" type="submit">
+					Sign in
+				</button>
 			</form>
 
-			<div>
-				<Link to="/register">Don't have an account? Register</Link>
-			</div>
+			<Link to="/register">Don't have an account? Register</Link>
 		</main>
 	);
 };

@@ -1,16 +1,26 @@
+import { Link } from 'react-router-dom';
+import '../styles/Home.css';
+
 const Home = () => {
 	const competitions = ['Sedef', 'Timon', 'Luca'];
 
 	return (
 		<main>
 			<h2>Wettbewerb öffnen</h2>
-			<div>
+
+			<div className="comp-list">
 				{competitions.map((comp) => (
-					<button key={comp}>{comp}</button>
+					<button class="button" key={comp}>
+						{comp}
+					</button>
 				))}
 			</div>
+
 			<h2>Wettbewerb erstellen</h2>
-			<button type="submit">Erstellen</button>
+
+			<Link to="/createcompetition">
+				<button class="button">Erstellen</button>
+			</Link>
 		</main>
 	);
 };
