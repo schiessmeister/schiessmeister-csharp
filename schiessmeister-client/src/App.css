@@ -72,6 +72,18 @@ a {
 	margin: 10px 0px;
 }
 
+.button--tertiary:hover {
+	background-color: #d4d4d4;
+}
+
+.button:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+	border-color: #cccccc;
+	color: #505050;
+	background-color: #f0f0f0;
+}
+
 input {
 	width: calc(100% - 20px);
 	padding: 10px;

@@ -51,7 +51,7 @@ const Register = () => {
 
 	return (
 		<main>
-			<h2>Create your account</h2>
+			<h2>Account erstellen</h2>
 
 			<form onSubmit={handleSubmit}>
 				<div>
@@ -65,18 +65,18 @@ const Register = () => {
 				</div>
 
 				<div>
-					<label htmlFor="password">Password</label>
-					<input id="password" name="password" type="password" required placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+					<label htmlFor="password">Passwort</label>
+					<input id="password" name="password" type="password" required placeholder="Passwort" value={password} onChange={(e) => setPassword(e.target.value)} />
 				</div>
 
 				{error && <div>{error}</div>}
 
 				<button className="button" type="submit">
-					Register
+					Registrieren
 				</button>
 			</form>
 
-			<Link to="/login">Already have an account? Sign in</Link>
+			<Link to="/login">Sie haben schon einen Account? Anmelden</Link>
 		</main>
 	);
 };

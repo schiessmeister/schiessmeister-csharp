@@ -3,6 +3,8 @@ import Register from './pages/Register';
 import Home from './pages/Home';
 import ParticipantsList from './pages/Participantslist';
 import CreateCompetition from './pages/CreateCompetition';
+import CompetitionOverview from './pages/CompetitionOverview';
+import ResultsInput from './pages/ResultsInput';
 import Logout from './pages/Logout';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
@@ -25,7 +27,9 @@ export default function App() {
 					<Route element={<ProtectedRoute />}>
 						<Route path="home" element={<Home />} />
 						<Route path="createcompetition" element={<CreateCompetition />} />
-						<Route path="participantsList" element={<ParticipantsList />} />
+						<Route path="participantsList/:id" element={<ParticipantsList />} />
+						<Route path="competition/:id" element={<CompetitionOverview />} />
+						<Route path="results/:competitionId/:participationId" element={<ResultsInput />} />
 					</Route>
 
 					{/* Redirects */}

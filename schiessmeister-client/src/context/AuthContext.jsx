@@ -5,6 +5,7 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
 	const [token, setToken] = useState(localStorage.getItem('token'));
+	const [userId, setUserId] = useState(localStorage.getItem('userId'));
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -15,14 +16,25 @@ export const AuthProvider = ({ children }) => {
 		}
 	}, [token]);
 
-	const login = (newToken) => {
+	useEffect(() => {
+		if (userId) {
+			localStorage.setItem('userId', userId);
+		} else {
+			localStorage.removeItem('userId');
+		}
+	}, [userId]);
+
+	const login = (newToken, newUserId) => {
 		setToken(newToken);
+		setUserId(newUserId);
 		navigate('/home');
 	};
 
 	const logout = () => {
 		setToken(null);
+		setUserId(null);
 		localStorage.removeItem('token');
+		localStorage.removeItem('userId');
 		navigate('/login');
 	};
 
@@ -30,7 +42,7 @@ export const AuthProvider = ({ children }) => {
 		logout();
 	};
 
-	return <AuthContext.Provider value={{ token, login, logout, handleUnauthorized }}>{children}</AuthContext.Provider>;
+	return <AuthContext.Provider value={{ token, userId, login, logout, handleUnauthorized }}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {

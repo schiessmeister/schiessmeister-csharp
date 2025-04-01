@@ -27,7 +27,7 @@ const Login = () => {
 			}
 
 			const data = await response.json();
-			login(data.token);
+			login(data.token, data.id);
 		} catch (error) {
 			setError('Invalid username or password');
 			console.error('Login error:', error);
@@ -36,7 +36,7 @@ const Login = () => {
 
 	return (
 		<main>
-			<h2>Sign in to your account</h2>
+			<h2>Melde dich an</h2>
 
 			<form onSubmit={handleSubmit}>
 				<div>
@@ -45,18 +45,18 @@ const Login = () => {
 				</div>
 
 				<div>
-					<label htmlFor="password">Password</label>
-					<input id="password" name="password" type="password" required placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+					<label htmlFor="password">Passwort</label>
+					<input id="password" name="password" type="password" required placeholder="Passwort" value={password} onChange={(e) => setPassword(e.target.value)} />
 				</div>
 
 				{error && <div>{error}</div>}
 
-				<button class="button" type="submit">
-					Sign in
+				<button className="button" type="submit">
+					Anmelden
 				</button>
 			</form>
 
-			<Link to="/register">Don't have an account? Register</Link>
+			<Link to="/register">Sie haben keinen Account? Registrieren</Link>
 		</main>
 	);
 };
