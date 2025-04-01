@@ -66,7 +66,7 @@ const CompetitionOverview = () => {
 						</button>
 					</div>
 				))}
-				{participants.length === 0 && <p>Keine {title.toLowerCase()}.</p>}
+				{participants.length === 0 && <p>Keine {title}.</p>}
 			</div>
 		</div>
 	);
