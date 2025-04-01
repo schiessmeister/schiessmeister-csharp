@@ -50,8 +50,8 @@ const ParticipantsList = () => {
 		try {
 			// Create new participation
 			const newParticipation = {
-				class: 'TEST',
-				results: '{}',
+				class: '',
+				results: '[]',
 				orderNb: getMaxOrderNb() + 1,
 				shooterId: shooterId
 			};

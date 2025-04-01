@@ -11,6 +11,17 @@ const CompetitionOverview = () => {
 	const [error, setError] = useState(null);
 	const auth = useAuth();
 
+	const parseResults = (participation) => {
+		let results = JSON.parse(participation.results || '[]');
+		if (!Array.isArray(results)) results = [];
+		return results;
+	};
+
+	const filterParticipations = (participation, isCompleted) => {
+		const results = parseResults(participation);
+		return isCompleted ? results.length === 5 : results.length < 5;
+	};
+
 	useEffect(() => {
 		const fetchCompetition = async () => {
 			try {
@@ -40,6 +51,26 @@ const CompetitionOverview = () => {
 	if (error) return <div className="error">{error}</div>;
 	if (!competition) return <div>Loading...</div>;
 
+	const nextParticipants = competition.participations.filter((p) => filterParticipations(p, false));
+	const completedParticipants = competition.participations.filter((p) => filterParticipations(p, true));
+
+	const ParticipantList = ({ participants, title }) => (
+		<div className="participants-list">
+			<h3>{title}</h3>
+			<div className="participants-grid">
+				{participants.map((participation) => (
+					<div key={participation.id} className="participant-item">
+						<span className="participant-name">{participation.shooter.name}</span>
+						<button className="button button--tertiary results-btn" onClick={() => navigate(`/results/${id}/${participation.id}`)}>
+							Ergebnisse
+						</button>
+					</div>
+				))}
+				{participants.length === 0 && <p>Keine {title.toLowerCase()}.</p>}
+			</div>
+		</div>
+	);
+
 	return (
 		<main>
 			<h2>{competition.name}</h2>
@@ -57,21 +88,8 @@ const CompetitionOverview = () => {
 			<button className="button button--secondary" onClick={() => window.open(`/public-leaderboard/${id}`, '_blank')}>
 				Live Rangliste
 			</button>
-			<div className="participants-list">
-				<h3>Nächste Teilnehmer</h3>
-				<div className="participants-grid">
-					{competition.participations.map((participation) => (
-						<div key={participation.id} className="participant-item">
-							<span className="participant-name">{participation.shooter.name}</span>
-							<button className="button button--tertiary results-btn" onClick={() => navigate(`/results/${id}/${participation.id}`)}>
-								Ergebnisse
-							</button>
-						</div>
-					))}
-
-					{competition.participations.length == 0 && <p>Keine Teilnehmer.</p>}
-				</div>
-			</div>
+			<ParticipantList participants={nextParticipants} title="Nächste Teilnehmer" />
+			<ParticipantList participants={completedParticipants} title="Abgeschlossene Teilnehmer" />
 			<button className="button" onClick={() => navigate(`/participantsList/${id}`)}>
 				Teilnehmer verwalten
 			</button>
