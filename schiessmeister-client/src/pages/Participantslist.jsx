@@ -56,8 +56,6 @@ const ParticipantsList = () => {
 				shooterId: shooterId
 			};
 
-			console.log(newParticipation);
-
 			// Update competition with new participation
 			const updatedCompetition = {
 				...competition,

@@ -42,7 +42,7 @@ const Register = () => {
 			}
 
 			const data = await loginResponse.json();
-			login(data.token);
+			login(data.token, data.id);
 		} catch (error) {
 			setError(error.message || 'Registration failed');
 			console.error('Registration error:', error);
