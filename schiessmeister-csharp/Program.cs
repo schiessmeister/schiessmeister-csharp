@@ -11,7 +11,6 @@ using schiessmeister_csharp.Infrastructure;
 using schiessmeister_csharp.Infrastructure.MySqlRepositories;
 using schiessmeister_csharp.API.Hubs;
 using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.SignalR;
 
 namespace schiessmeister_csharp;
 
@@ -22,7 +21,7 @@ public class Program {
 
         builder.Services.AddControllers()
             .AddJsonOptions(options => {
-                options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
             });
 
         #region Auth
