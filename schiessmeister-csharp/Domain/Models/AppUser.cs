@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using schiessmeister_csharp.Domain.Models.ValueTypes;
 using schiessmeister_csharp.Domain.Repositories;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace schiessmeister_csharp.Domain.Models;
 
@@ -28,5 +29,8 @@ public class AppUser : IdentityUser<int>, IEntity {
     public List<Participation> Participations { get; set; } = [];
     public List<Organization> OwnedOrganizations { get; set; } = [];
     public List<Competition> RecordedCompetitions { get; set; } = [];
+
+    // Attribute needed since there are multiple relationships between AppUser and Participation.
+    [InverseProperty("Recorder")]
     public List<Participation> RecordedParticipations { get; set; } = [];
 }

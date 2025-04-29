@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using schiessmeister_csharp.Domain.Models;
 using schiessmeister_csharp.Domain.Repositories;
-using schiessmeister_csharp.API.Services;
+using schiessmeister_csharp.Domain.Services;
 
 namespace schiessmeister_csharp.Infrastructure.MySqlRepositories;
 
@@ -26,7 +26,7 @@ public class MySqlCompetitionRepository : ICompetitionRepository {
 
     public async Task<Competition?> FindByIdFullAsync(int id) {
         return await _db.Competitions
-            .Include(c => c.Participations.OrderBy(p => p.OrderNb))
+            .Include(c => c.Participations.OrderBy(p => p.LaneNb))
             .ThenInclude(p => p.Shooter)
             .FirstOrDefaultAsync(c => c.Id == id);
     }

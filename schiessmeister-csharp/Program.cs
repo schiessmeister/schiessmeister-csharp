@@ -11,6 +11,7 @@ using schiessmeister_csharp.Infrastructure;
 using schiessmeister_csharp.Infrastructure.MySqlRepositories;
 using schiessmeister_csharp.API.Hubs;
 using System.Text.Json.Serialization;
+using schiessmeister_csharp.Domain.Services;
 
 namespace schiessmeister_csharp;
 
@@ -106,7 +107,6 @@ public class Program {
 
         builder.Services.AddScoped<IAppUserRepository, MySqlAppUserRepository>();
         builder.Services.AddScoped<ICompetitionRepository, MySqlCompetitionRepository>();
-        builder.Services.AddScoped<IShooterRepository, MySqlShooterRepository>();
         builder.Services.AddScoped<ICompetitionNotificationService, CompetitionNotificationService>();
 
         builder.Services.AddSignalR(options => {

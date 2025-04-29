@@ -1,8 +1,8 @@
-using schiessmeister_csharp.API.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using schiessmeister_csharp.Domain.Models.Auth;
 using schiessmeister_csharp.Domain.Models;
+using schiessmeister_csharp.Domain.Services;
 
 namespace schiessmeister_csharp.API.Controllers;
 

@@ -1,6 +1,6 @@
 using schiessmeister_csharp.Domain.Models;
 
-namespace schiessmeister_csharp.API.Services {
+namespace schiessmeister_csharp.Domain.Services {
 
     public interface ICompetitionNotificationService {
 
