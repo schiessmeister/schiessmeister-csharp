@@ -28,7 +28,7 @@ public class JwtService : ITokenService {
             authClaims.Add(new Claim(ClaimTypes.Role, userRole));
         }
 
-        var authSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration.GetSection("JwtSettings")["Secret"]!));
+        var authSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["JwtSettings:Secret"]!));
 
         var token = new JwtSecurityToken(
             expires: DateTime.Now.AddDays(15),

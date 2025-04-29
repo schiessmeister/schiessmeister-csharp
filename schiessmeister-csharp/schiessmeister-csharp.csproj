@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>schiessmeister_csharp</RootNamespace>
+    <UserSecretsId>c086e9ff-281e-4b9d-9dfc-de17b5a4a4e1</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

@@ -24,6 +24,37 @@ public class Program {
                 options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
             });
 
+        if (builder.Environment.IsDevelopment()) {
+            // Add user secrets for development
+            builder.Configuration.AddUserSecrets<Program>();
+
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen(opt => {
+                opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme() {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "Enter 'Bearer' [space] and then your valid token in the text input below.\r\n\r\nExample: \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\""
+                });
+                opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    }, Array.Empty<string>()
+                }
+            });
+            });
+        }
+
         #region Auth
 
         builder.Services.AddCors(options => {
@@ -54,7 +85,7 @@ public class Program {
             opt.TokenValidationParameters = new TokenValidationParameters {
                 IssuerSigningKey = new SymmetricSecurityKey(
                     Encoding.ASCII.GetBytes(
-                        builder.Configuration.GetSection("JwtSettings")["Secret"]!
+                        builder.Configuration["JwtSettings:Secret"]!
                     )),
                 ValidateIssuer = false,
                 ValidateAudience = false,
@@ -67,35 +98,7 @@ public class Program {
 
         #endregion Auth
 
-        if (builder.Environment.IsDevelopment()) {
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(opt => {
-                opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme() {
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey,
-                    Scheme = "Bearer",
-                    BearerFormat = "JWT",
-                    In = ParameterLocation.Header,
-                    Description = "Enter 'Bearer' [space] and then your valid token in the text input below.\r\n\r\nExample: \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\""
-                });
-                opt.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                {
-                    new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference
-                        {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
-                        }
-                    }, new string[] {}
-                }
-            });
-            });
-        }
-
-        string? connString = builder.Configuration.GetConnectionString("timon.mysql"); // Change according to current machine.
+        string? connString = builder.Configuration.GetConnectionString("mysql");
         if (connString == null) return;
 
         builder.Services.AddDbContext<MySqlDbContext>(options => options.UseMySql(connString, ServerVersion.AutoDetect(connString)));
