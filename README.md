@@ -1,6 +1,4 @@
-# Schiessmeister C#
-
-All rights reserved © Schiessmeister 2025
+# Schiessmeister
 
 ## Project Background
 
