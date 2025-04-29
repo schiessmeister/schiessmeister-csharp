@@ -7,9 +7,11 @@ namespace schiessmeister_csharp.Infrastructure.MySqlRepositories;
 
 public class MySqlDbContext : IdentityDbContext<AppUser, IdentityRole<int>, int> {
     public DbSet<AppUser> AppUsers { get; set; }
+    public DbSet<Organization> Organizations { get; set; }
     public DbSet<Competition> Competitions { get; set; }
+    public DbSet<Discipline> Disciplines { get; set; }
+    public DbSet<ParticipationGroup> ParticipationGroups { get; set; }
     public DbSet<Participation> Participations { get; set; }
-    public DbSet<Shooter> Shooters { get; set; }
 
     public MySqlDbContext(DbContextOptions<MySqlDbContext> options) : base(options) {
     }

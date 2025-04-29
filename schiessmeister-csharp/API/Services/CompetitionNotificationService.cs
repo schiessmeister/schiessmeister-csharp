@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.SignalR;
 using schiessmeister_csharp.API.Hubs;
 using schiessmeister_csharp.Domain.Models;
+using schiessmeister_csharp.Domain.Services;
 
 namespace schiessmeister_csharp.API.Services {
 
