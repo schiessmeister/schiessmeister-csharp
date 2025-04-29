@@ -1,7 +1,5 @@
 # Schiessmeister
 
-## Project Background
-
 Schiessmeister is a specialized shooting competition management system developed to address the growing needs of shooting clubs and competition organizers. The project emerged from the recognition that many shooting clubs still rely on manual processes or outdated systems for managing their competitions and members. This digital transformation initiative aims to modernize the shooting sports administration by providing a comprehensive, user-friendly solution that streamlines the entire competition lifecycle.
 
 The system is designed to serve multiple stakeholders:
@@ -11,11 +9,9 @@ The system is designed to serve multiple stakeholders:
 -   Participants who want easy access to competition information and results
 -   Club administrators who need comprehensive member and equipment management
 
-## Overview
-
-Schiessmeister is a comprehensive shooting competition management system designed to streamline the organization and documentation of shooting events. The system provides organizers with an efficient and intuitive tool to manage competitions from creation to live monitoring. The solution integrates modern backend and frontend technologies to ensure both stable data processing and an engaging user experience.
-
 ## Core Use Cases
+
+The system supports the following core use cases:
 
 ### Competition Management
 
@@ -36,7 +32,15 @@ Schiessmeister is a comprehensive shooting competition management system designe
 -   Role-based access control (organizers, participants)
 -   Identity management and authentication
 
-## Features
+## Domain Model
+
+![Domain Model](./docs/img/domain-model.png)
+
+## Backend - schiessmeister-csharp
+
+The backend serves as the robust foundation of Schiessmeister, providing a secure and scalable API that handles all core business logic, data persistence, and real-time communication. Built with modern .NET technologies, it ensures reliable performance and maintainability while supporting the complex requirements of shooting competition management.
+
+### Features
 
 -   Member management and authentication
 -   Competition organization and result tracking
@@ -47,7 +51,7 @@ Schiessmeister is a comprehensive shooting competition management system designe
 -   Real-time updates via WebSocket/SignalR
 -   Live competition monitoring
 
-## Backend Technology Stack
+### Tech-Stack
 
 -   ASP.NET Core 8.0
 -   Entity Framework Core
@@ -57,9 +61,15 @@ Schiessmeister is a comprehensive shooting competition management system designe
 -   Identity Framework
 -   WebSocket/SignalR for real-time communication
 
-# Schiessmeister Client
+### ER-Model
 
-## Features
+![ER Model](./docs/img/er-model.png)
+
+## Frontend - schiessmeister-client
+
+The frontend delivers an intuitive and responsive user experience, enabling users to interact with the system's features through a modern web interface. It focuses on providing real-time updates, clear data visualization, and seamless navigation across all device types, making competition management accessible and efficient.
+
+### Features
 
 -   Responsive dashboard interface
 -   Real-time competition updates
@@ -70,7 +80,7 @@ Schiessmeister is a comprehensive shooting competition management system designe
 -   Live competition monitoring interface
 -   Intuitive competition management tools
 
-## Frontend Technology Stack
+### Tech-Stack
 
 -   React 18
 -   Vite
@@ -78,19 +88,5 @@ Schiessmeister is a comprehensive shooting competition management system designe
 -   Modern CSS (Tailwind/styled-components)
 -   REST API integration
 -   WebSocket/SignalR client integration
-
-# Technical Implementation Details
-
-### Backend Architecture
-
-The backend architecture is built on .NET Core and utilizes Entity Framework Core (EFCore) for database access and management. A REST API, developed with WebAPI, provides the necessary endpoints for data communication. The Identity Framework is implemented to meet security requirements for authentication and authorization.
-
-### Frontend Architecture
-
-The frontend provides a comprehensive interface that covers all relevant use cases. Organizers can view their competitions, create new events, manage participants, and track live results through an intuitive interface.
-
-### Real-time Communication
-
-The application implements two-way communication (WebSocket/SignalR) to enable dynamic and interactive usage. This ensures that changes such as point entries or new participants are immediately reflected in the live result display.
 
 All rights reserved © Schiessmeister 2025
