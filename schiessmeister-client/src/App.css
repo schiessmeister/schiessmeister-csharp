@@ -23,6 +23,10 @@ body {
 	margin: 0;
 }
 
+main {
+	padding: 3rem 1rem;
+}
+
 h1,
 h2,
 h3,
