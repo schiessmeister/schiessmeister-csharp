@@ -6,8 +6,8 @@ using schiessmeister_csharp.Domain.Services;
 
 namespace schiessmeister_csharp.API.Controllers;
 
-[Route("api/authenticate")]
 [ApiController]
+[Route("api/authenticate")]
 public class AuthenticateController : ControllerBase {
     private readonly UserManager<AppUser> userManager;
     private readonly ITokenService tokenService;
@@ -56,7 +56,6 @@ public class AuthenticateController : ControllerBase {
             return BadRequest("User creation failed! Please check user details and try again.");
 
         await userManager.AddToRoleAsync(user, "User");
-        await userManager.AddToRoleAsync(user, "Organizer");
 
         return Ok("User created successfully!");
     }

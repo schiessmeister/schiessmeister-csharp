@@ -43,19 +43,16 @@ public class Program {
                     In = ParameterLocation.Header,
                     Description = "Enter 'Bearer' [space] and then your valid token in the text input below.\r\n\r\nExample: \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\""
                 });
-                opt.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                {
-                    new OpenApiSecurityScheme
+                opt.AddSecurityRequirement(new OpenApiSecurityRequirement() {
                     {
-                        Reference = new OpenApiReference
-                        {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
-                        }
-                    }, Array.Empty<string>()
-                }
-            });
+                        new OpenApiSecurityScheme() {
+                            Reference = new OpenApiReference() {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        }, Array.Empty<string>()
+                    }
+                });
             });
         }
 
