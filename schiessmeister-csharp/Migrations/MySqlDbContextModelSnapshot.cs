@@ -363,18 +363,17 @@ namespace schiessmeister_csharp.Migrations
                     b.Property<string>("DqStatus")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("LaneNb")
+                    b.Property<int?>("ParticipationGroupId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ParticipationGroupId")
+                    b.Property<int>("PositionNb")
                         .HasColumnType("int");
 
                     b.Property<int>("RecorderId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Results")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<string>("Result")
+                        .HasColumnType("json");
 
                     b.Property<string>("ShooterClass")
                         .IsRequired()

@@ -15,4 +15,12 @@ public class MySqlDbContext : IdentityDbContext<AppUser, IdentityRole<int>, int>
 
     public MySqlDbContext(DbContextOptions<MySqlDbContext> options) : base(options) {
     }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder) {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<Participation>(entity =>
+            entity.Property(p => p.Result).HasColumnType("json")
+        );
+    }
 }

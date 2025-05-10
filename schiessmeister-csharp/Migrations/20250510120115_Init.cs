@@ -339,8 +339,8 @@ namespace schiessmeister_csharp.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     ShooterClass = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    LaneNb = table.Column<int>(type: "int", nullable: false),
-                    Results = table.Column<string>(type: "longtext", nullable: false)
+                    PositionNb = table.Column<int>(type: "int", nullable: false),
+                    Result = table.Column<string>(type: "json", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Team = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),

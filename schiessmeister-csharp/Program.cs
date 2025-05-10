@@ -21,10 +21,12 @@ public class Program {
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services
-            .AddControllers()
-            .AddJsonOptions(options => {
-                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-            });
+            .AddControllers();
+
+        // TODO remove if not needed.
+        //.AddJsonOptions(options => {
+        //    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        //});
 
         if (builder.Environment.IsDevelopment()) {
             // Add user secrets for development
@@ -103,7 +105,9 @@ public class Program {
         string? connString = builder.Configuration.GetConnectionString("mysql");
         if (connString == null) return;
 
-        builder.Services.AddDbContext<MySqlDbContext>(options => options.UseMySql(connString, ServerVersion.AutoDetect(connString)));
+        builder.Services.AddDbContext<MySqlDbContext>(options =>
+            options.UseMySql(connString, ServerVersion.AutoDetect(connString), options => options.UseMicrosoftJson())
+        );
 
         builder.Services.AddScoped<IAppUserRepository, MySqlAppUserRepository>();
         builder.Services.AddScoped<ICompetitionRepository, MySqlCompetitionRepository>();

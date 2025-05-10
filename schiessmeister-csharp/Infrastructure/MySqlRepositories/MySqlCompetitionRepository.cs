@@ -26,7 +26,7 @@ public class MySqlCompetitionRepository : ICompetitionRepository {
 
     public async Task<Competition?> FindByIdFullAsync(int id) {
         return await _db.Competitions
-            .Include(c => c.Participations.OrderBy(p => p.LaneNb))
+            .Include(c => c.Participations.OrderBy(p => p.PositionNb))
             .ThenInclude(p => p.Shooter)
             .FirstOrDefaultAsync(c => c.Id == id);
     }

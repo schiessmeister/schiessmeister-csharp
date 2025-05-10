@@ -8,8 +8,13 @@ public class Participation : IEntity {
 
     public int Id { get; set; }
     public string ShooterClass { get; set; }
-    public int LaneNb { get; set; }
-    public string Results { get; set; } // JSON string containing the results
+
+    // Gets used as simple OrderNb for competitions without squads
+    // and as LaneNb for the ones with.
+    public int PositionNb { get; set; }
+
+    public ShootingResult? Result { get; set; } // Saved as JSON in the db, configured in the DbContext.
+
     public string? Team { get; set; }
 
     public string? DqStatus {
