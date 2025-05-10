@@ -20,8 +20,7 @@ public class Program {
     public static void Main(string[] args) {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services
-            .AddControllers();
+        builder.Services.AddControllers();
 
         // TODO remove if not needed.
         //.AddJsonOptions(options => {
