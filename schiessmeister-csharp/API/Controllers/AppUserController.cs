@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using schiessmeister_csharp.API.Extensions;
 using schiessmeister_csharp.Domain.Models;
