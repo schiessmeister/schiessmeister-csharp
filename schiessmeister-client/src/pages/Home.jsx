@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { getCompetitions, deleteUser } from '../api/apiClient';
 import { useAuth } from '../context/AuthContext';
 import '../styles/Home.css';
+import { Button } from "@/components/ui/button"
 
 const Home = () => {
 	const [competitions, setCompetitions] = useState([]);
@@ -13,8 +14,8 @@ const Home = () => {
 	useEffect(() => {
 		const fetchCompetitions = async () => {
 			try {
-				const data = await getCompetitions(auth);
-				setCompetitions(data);
+				//const data = await getCompetitions(auth);
+				//setCompetitions(data);
 			} catch (err) {
 				setError('Failed to load competitions');
 				console.error(err);
@@ -55,7 +56,7 @@ const Home = () => {
 
 				{competitions.length == 0 && <p>Noch keine Bewerbe.</p>}
 			</div>
-
+			
 			<h2>Wettbewerb erstellen</h2>
 
 			<Link to="/createcompetition">
