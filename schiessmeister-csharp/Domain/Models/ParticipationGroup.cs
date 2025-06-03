@@ -18,4 +18,22 @@ public class ParticipationGroup : IEntity {
 
     // Can only have participations if it's a bottom-level group. Meaning it has no sub-groups.
     public List<Participation> Participations { get; set; } = [];
+
+    public Competition GetCompetition() {
+        if (Competition != null)
+            return Competition;
+
+        return ParentGroup!.GetCompetition();
+    }
+
+    public List<ParticipationGroup> GetAllSubGroups() {
+        List<ParticipationGroup> subGroups = [];
+
+        foreach (var subGroup in SubGroups) {
+            subGroups.Add(subGroup);
+            subGroups.AddRange(subGroup.GetAllSubGroups());
+        }
+
+        return subGroups;
+    }
 }

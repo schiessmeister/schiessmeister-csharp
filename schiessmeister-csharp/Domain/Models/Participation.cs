@@ -13,7 +13,7 @@ public class Participation : IEntity {
     // and as LaneNb for the ones with.
     public int PositionNb { get; set; }
 
-    public ShootingResult? Result { get; set; } // Saved as JSON in the db, configured in the DbContext.
+    public ShootingResult Result { get; set; } = new(); // Saved as JSON in the db, configured in the DbContext.
 
     public string? Team { get; set; }
 

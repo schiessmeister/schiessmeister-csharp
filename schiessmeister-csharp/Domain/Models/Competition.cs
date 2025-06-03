@@ -18,4 +18,11 @@ public class Competition : IEntity {
     public List<AppUser> Recorders { get; set; } = [];
     public List<Participation> Participations { get; set; } = [];
     public List<ParticipationGroup> Groups { get; set; } = []; // At least one.
+
+    // Get all unique teams from participations.
+    public string[] Teams => Participations
+        .Where(p => p.Team is not null)
+        .Select(p => p.Team!)
+        .Distinct()
+        .ToArray();
 }
