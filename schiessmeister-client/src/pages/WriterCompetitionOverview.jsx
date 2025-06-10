@@ -18,9 +18,20 @@ const WriterCompetitionOverview = () => {
   const basePath = '/writer';
 
   const parseResults = (participation) => {
-    let results = JSON.parse(participation.results || '[]');
-    if (!Array.isArray(results)) results = [];
-    return results;
+    try {
+      if (!participation.results) return [];
+      if (Array.isArray(participation.results)) return participation.results;
+      if (typeof participation.results === 'object') return participation.results;
+      if (typeof participation.results === 'string') {
+        const trimmed = participation.results.trim();
+        if (trimmed.startsWith('[') || trimmed.startsWith('{')) {
+          return JSON.parse(trimmed);
+        }
+      }
+      return [];
+    } catch (e) {
+      return [];
+    }
   };
 
   const filterParticipations = (participation, isCompleted) => {
@@ -75,8 +86,11 @@ const WriterCompetitionOverview = () => {
             className="border rounded px-3 py-2 mt-4"
             value={selectedGroupId || ''}
             onChange={e => {
-              setSelectedGroupId(e.target.value);
+              const groupId = e.target.value;
+              setSelectedGroupId(groupId);
               setDialogOpen(false);
+              // Direkt auf die participationGroup-Ansicht navigieren
+              navigate(`/writer/competitions/${id}/participationGroups/${groupId}`);
             }}
           >
             <option value="">Bitte wählen…</option>
