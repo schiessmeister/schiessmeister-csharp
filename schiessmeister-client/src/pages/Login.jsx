@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { loginRequest } from '../api/authService';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 const Login = () => {
 	const [username, setUsername] = useState('');
@@ -26,23 +29,21 @@ const Login = () => {
 		<main>
 			<h2>Melde dich an</h2>
 
-			<form onSubmit={handleSubmit}>
-				<div>
-					<label htmlFor="username">Username</label>
-					<input id="username" name="username" type="text" required placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
-				</div>
+                        <form onSubmit={handleSubmit}>
+                                <div>
+                                        <Label htmlFor="username">Username</Label>
+                                        <Input id="username" name="username" type="text" required placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
+                                </div>
 
-				<div>
-					<label htmlFor="password">Passwort</label>
-					<input id="password" name="password" type="password" required placeholder="Passwort" value={password} onChange={(e) => setPassword(e.target.value)} />
-				</div>
+                                <div>
+                                        <Label htmlFor="password">Passwort</Label>
+                                        <Input id="password" name="password" type="password" required placeholder="Passwort" value={password} onChange={(e) => setPassword(e.target.value)} />
+                                </div>
 
-				{error && <div>{error}</div>}
+                                {error && <div>{error}</div>}
 
-				<button className="button" type="submit">
-					Anmelden
-				</button>
-			</form>
+                                <Button type="submit">Anmelden</Button>
+                        </form>
 
 			<Link to="/register">Sie haben keinen Account? Registrieren</Link>
 		</main>

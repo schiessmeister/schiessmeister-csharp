@@ -48,28 +48,28 @@ const Home = () => {
 			<h2>Wettbewerb öffnen</h2>
 
 			<div className="comp-list">
-				{competitions.map((comp) => (
-					<button className="button" key={comp.id} onClick={() => handleCompetitionClick(comp.id)}>
-						{comp.name}
-					</button>
-				))}
+                                {competitions.map((comp) => (
+                                        <Button key={comp.id} onClick={() => handleCompetitionClick(comp.id)}>
+                                                {comp.name}
+                                        </Button>
+                                ))}
 
 				{competitions.length == 0 && <p>Noch keine Bewerbe.</p>}
 			</div>
 			
 			<h2>Wettbewerb erstellen</h2>
 
-			<Link to="/createcompetition">
-				<button className="button">Erstellen</button>
-			</Link>
+                        <Link to="/createcompetition">
+                                <Button>Erstellen</Button>
+                        </Link>
 
 			<div className="account-actions">
-				<button className="button button--secondary logout-button" onClick={auth.logout}>
-					Abmelden
-				</button>
-				<button className="button button--secondary delete-button" onClick={handleDeleteAccount}>
-					Konto löschen
-				</button>
+                                <Button variant="secondary" onClick={auth.logout}>
+                                        Abmelden
+                                </Button>
+                                <Button variant="secondary" onClick={handleDeleteAccount}>
+                                        Konto löschen
+                                </Button>
 			</div>
 		</main>
 	);

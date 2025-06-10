@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { createApi } from '../utils/api';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 const CreateCompetition = () => {
 	const navigate = useNavigate();
@@ -35,22 +37,20 @@ const CreateCompetition = () => {
 	return (
 		<main>
 			<h2>Wettbewerb erstellen</h2>
-			<form onSubmit={handleSubmit}>
-				<input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required />
+                        <form onSubmit={handleSubmit}>
+                                <Input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required />
 
-				<input type="text" placeholder="Standort" value={location} onChange={(e) => setLocation(e.target.value)} required />
+                                <Input type="text" placeholder="Standort" value={location} onChange={(e) => setLocation(e.target.value)} required />
 
-				<div>Datum</div>
-				<input type="datetime-local" value={date} onChange={(e) => setDate(e.target.value)} required />
+                                <div>Datum</div>
+                                <Input type="datetime-local" value={date} onChange={(e) => setDate(e.target.value)} required />
 
-				<button className="button" type="submit">
-					Speichern
-				</button>
+                                <Button type="submit">Speichern</Button>
 
-				<button type="button" className="button button--secondary" onClick={handleReset}>
-					Abbrechen
-				</button>
-			</form>
+                                <Button type="button" variant="secondary" onClick={handleReset}>
+                                        Abbrechen
+                                </Button>
+                        </form>
 		</main>
 	);
 };
