@@ -1,46 +1,51 @@
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Home from './pages/Home';
-import ParticipantsList from './pages/Participantslist';
+import Competitions from './pages/Competitions';
 import CreateCompetition from './pages/CreateCompetition';
-import CompetitionOverview from './pages/CompetitionOverview';
-import ResultsInput from './pages/ResultsInput';
+import EditCompetition from './pages/EditCompetition';
+import CompetitionDetail from './pages/CompetitionDetail';
+import Results from './pages/Results';
+import CreateParticipantGroup from './pages/CreateParticipantGroup';
+import EditParticipantGroup from './pages/EditParticipantGroup';
 import Logout from './pages/Logout';
-import PublicLeaderboard from './pages/PublicLeaderboard';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { AuthProvider } from './context/AuthContext';
+import { DataProvider } from './context/DataContext';
 import ProtectedRoute from './components/ProtectedRoute';
 
 export default function App() {
-	return (
-		<BrowserRouter>
-			<AuthProvider>
-				<Routes>
-					{/* Public routes */}
-					<Route path="login" element={<Login />} />
-					<Route path="register" element={<Register />} />
-					<Route path="logout" element={<Logout />} />
-					<Route path="public-leaderboard/:id" element={<PublicLeaderboard />} />
+        return (
+                <BrowserRouter>
+                        <AuthProvider>
+                                <DataProvider>
+                                        <Routes>
+                                                {/* Public routes */}
+                                                <Route path="login" element={<Login />} />
+                                                <Route path="register" element={<Register />} />
+                                                <Route path="logout" element={<Logout />} />
 
-					{/* Protected routes */}
-					<Route element={<ProtectedRoute />}>
-						<Route path="home" element={<Home />} />
-						<Route path="createcompetition" element={<CreateCompetition />} />
-						<Route path="participantsList/:id" element={<ParticipantsList />} />
-						<Route path="competition/:id" element={<CompetitionOverview />} />
-						<Route path="results/:competitionId/:participationId" element={<ResultsInput />} />
-					</Route>
+                                                {/* Protected routes */}
+                                                <Route element={<ProtectedRoute />}>
+                                                        <Route path="competitions" element={<Competitions />} />
+                                                        <Route path="competitions/new" element={<CreateCompetition />} />
+                                                        <Route path="competitions/:id" element={<CompetitionDetail />} />
+                                                        <Route path="competitions/:id/edit" element={<EditCompetition />} />
+                                                        <Route path="results" element={<Results />} />
+                                                        <Route path="participant-groups/new" element={<CreateParticipantGroup />} />
+                                                        <Route path="participant-groups/:id/edit" element={<EditParticipantGroup />} />
+                                                </Route>
 
-					{/* Redirects */}
-					<Route path="/" element={<Navigate to="/home" replace />} />
-					<Route path="*" element={<Navigate to="/home" replace />} />
-				</Routes>
-			</AuthProvider>
-		</BrowserRouter>
-	);
+                                                {/* Redirects */}
+                                                <Route path="/" element={<Navigate to="/competitions" replace />} />
+                                                <Route path="*" element={<Navigate to="/competitions" replace />} />
+                                        </Routes>
+                                </DataProvider>
+                        </AuthProvider>
+                </BrowserRouter>
+        );
 }
 
 createRoot(document.getElementById('root')).render(
