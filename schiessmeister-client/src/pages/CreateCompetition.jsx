@@ -1,222 +1,24 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useData } from '../context/DataContext';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
-import { Calendar } from '@/components/ui/calendar';
-import { Calendar as CalendarIcon } from 'lucide-react';
-import { format } from 'date-fns';
-import { WriterMultiCombobox } from '@/components/ui/WriterMultiCombobox';
-
-import {
-  Sheet,
-  SheetTrigger,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetFooter,
-  SheetClose
-} from '@/components/ui/sheet';
-
-// Mock: Schreiber-Liste vom Server
-const FIXED_WRITERS = [
-  'Schreiber 1',
-  'Schreiber 2',
-  'Schreiber 3',
-];
+import CompetitionForm from '../components/CompetitionForm';
 
 const CreateCompetition = () => {
   const { addCompetition } = useData();
   const navigate = useNavigate();
 
-  const [name, setName] = useState('');
-  const [date, setDate] = useState(undefined);
-  const [klassen, setKlassen] = useState([]);
-  const [schreiber, setSchreiber] = useState([]);
-  const [disziplinen, setDisziplinen] = useState([]);
-
-  // Sheet States
-  const [sheetKlasseOpen, setSheetKlasseOpen] = useState(false);
-  const [sheetSchreiberOpen, setSheetSchreiberOpen] = useState(false);
-  const [sheetDisziplinOpen, setSheetDisziplinOpen] = useState(false);
-
-  // Temp states for adding
-  const [newKlasse, setNewKlasse] = useState('');
-  const [newDisziplin, setNewDisziplin] = useState('');
-  const [newDisziplinSerien, setNewDisziplinSerien] = useState(1);
-  const [newDisziplinSchuesse, setNewDisziplinSchuesse] = useState(1);
-
-  // Fehler-States
-  const [errorKlassen, setErrorKlassen] = useState('');
-  const [errorDisziplinen, setErrorDisziplinen] = useState('');
-
-  // Validierung bei Submit
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    let valid = true;
-    if (klassen.length === 0) {
-      setErrorKlassen('Mindestens eine Klasse ist erforderlich.');
-      valid = false;
-    } else {
-      setErrorKlassen('');
-    }
-    if (disziplinen.length === 0) {
-      setErrorDisziplinen('Mindestens eine Disziplin ist erforderlich.');
-      valid = false;
-    } else {
-      setErrorDisziplinen('');
-    }
-    if (!valid) return;
-    addCompetition({
-      name,
-      date: date ? date.toISOString() : '',
-      klassen,
-      schreiber,
-      disziplinen,
-    });
+  const handleSubmit = (data) => {
+    addCompetition(data);
     navigate('/competitions');
-  };
-
-  // Schreiber-Auswahl: fixed, keine freie Eingabe
-  const toggleWriter = (writer) => {
-    setSchreiber((prev) =>
-      prev.includes(writer)
-        ? prev.filter((w) => w !== writer)
-        : [...prev, writer]
-    );
   };
 
   return (
     <main>
-      <form onSubmit={handleSubmit} className="max-w-4xl mx-auto mt-8 flex flex-col gap-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="flex flex-col gap-6">
-            {/* Name */}
-            <div>
-              <label className="block font-medium mb-1">Bezeichnung</label>
-              <Input value={name} onChange={e => setName(e.target.value)} placeholder="Bezeichnung" required />
-            </div>
-            {/* Datum */}
-            <div>
-              <label className="block font-medium mb-1">Datum</label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={"w-full justify-start text-left font-normal " + (!date ? 'text-muted-foreground' : '')}
-                    type="button"
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {date ? format(date, 'PPP') : 'Datum wählen'}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={setDate}
-                    captionLayout="dropdown"
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
-            {/* Klassen */}
-            <div>
-              <label className="block font-medium mb-1">Klassen</label>
-              <ul className="mb-2">
-                {klassen.map((k, i) => (
-                  <li key={i} className="flex items-center gap-2 mb-1">
-                    <span>{k}</span>
-                    <Button type="button" size="icon" variant="ghost" onClick={() => { setKlassen(klassen.filter((_, idx) => idx !== i)); setErrorKlassen(klassen.length - 1 > 1 ? '' : errorKlassen); }}>🗑️</Button>
-                  </li>
-                ))}
-              </ul>
-              {errorKlassen && <div className="text-red-600 text-sm mb-2">{errorKlassen}</div>}
-              <Sheet open={sheetKlasseOpen} onOpenChange={setSheetKlasseOpen}>
-                <SheetTrigger asChild>
-                  <Button type="button" variant="outline" className="w-full" onClick={() => setSheetKlasseOpen(true)}>
-                    Neue Klasse hinzufügen
-                  </Button>
-                </SheetTrigger>
-                <SheetContent side="right">
-                  <SheetHeader>
-                    <SheetTitle>Klasse hinzufügen</SheetTitle>
-                  </SheetHeader>
-                  <div className="p-4 flex flex-col gap-4">
-                    <Input placeholder="Klassenname" value={newKlasse} onChange={e => setNewKlasse(e.target.value)} />
-                    <Button type="button" onClick={() => { if (newKlasse) { setKlassen([...klassen, newKlasse]); setNewKlasse(''); setSheetKlasseOpen(false); setErrorKlassen(klassen.length + 1 > 0 ? '' : errorKlassen); } }}>Hinzufügen</Button>
-                  </div>
-                  <SheetFooter>
-                    <SheetClose asChild>
-                      <Button variant="secondary">Abbrechen</Button>
-                    </SheetClose>
-                  </SheetFooter>
-                </SheetContent>
-              </Sheet>
-            </div>
-            {/* Schreiber (fixed Auswahl, nicht verpflichtend) */}
-            <div>
-              <WriterMultiCombobox
-                options={FIXED_WRITERS}
-                value={schreiber}
-                onChange={setSchreiber}
-                label="Schreiber"
-              />
-            </div>
-          </div>
-          {/* Disziplinen */}
-          <div className="flex flex-col gap-6">
-            <div>
-              <label className="block font-medium mb-1">Disziplin</label>
-              <ul className="mb-2">
-                {disziplinen.map((d, i) => (
-                  <li key={i} className="flex items-center gap-2 mb-1">
-                    <span>{d.name} (Serien: {d.serien}, Schüsse: {d.schuesse})</span>
-                    <Button type="button" size="icon" variant="ghost" onClick={() => setDisziplinen(disziplinen.filter((_, idx) => idx !== i))}>🗑️</Button>
-                  </li>
-                ))}
-              </ul>
-              {errorDisziplinen && <div className="text-red-600 text-sm mb-2">{errorDisziplinen}</div>}
-              <Sheet open={sheetDisziplinOpen} onOpenChange={setSheetDisziplinOpen}>
-                <SheetTrigger asChild>
-                  <Button type="button" variant="outline" className="w-full" onClick={() => setSheetDisziplinOpen(true)}>
-                    Neue Disziplin hinzufügen
-                  </Button>
-                </SheetTrigger>
-                <SheetContent side="right">
-                  <SheetHeader>
-                    <SheetTitle>Neue Disziplin hinzufügen</SheetTitle>
-                  </SheetHeader>
-                  <div className="p-4 flex flex-col gap-4">
-                    <Input placeholder="Bezeichnung" value={newDisziplin} onChange={e => setNewDisziplin(e.target.value)} />
-                    <div className="flex gap-4">
-                      <div>
-                        <label className="block text-xs mb-1">Anzahl Serien</label>
-                        <Input type="number" min={1} value={newDisziplinSerien} onChange={e => setNewDisziplinSerien(Number(e.target.value))} />
-                      </div>
-                      <div>
-                        <label className="block text-xs mb-1">Anzahl Schüsse</label>
-                        <Input type="number" min={1} value={newDisziplinSchuesse} onChange={e => setNewDisziplinSchuesse(Number(e.target.value))} />
-                      </div>
-                    </div>
-                    <Button type="button" onClick={() => { if (newDisziplin) { setDisziplinen([...disziplinen, { name: newDisziplin, serien: newDisziplinSerien, schuesse: newDisziplinSchuesse }]); setNewDisziplin(''); setNewDisziplinSerien(1); setNewDisziplinSchuesse(1); setSheetDisziplinOpen(false); setErrorKlassen(klassen.length + 1 > 0 ? '' : errorKlassen); } }}>Erstellen</Button>
-                  </div>
-                  <SheetFooter>
-                    <SheetClose asChild>
-                      <Button variant="secondary">Abbrechen</Button>
-                    </SheetClose>
-                  </SheetFooter>
-                </SheetContent>
-              </Sheet>
-            </div>
-          </div>
-        </div>
-        <div className="flex justify-end gap-4 mt-8">
-          <Button type="submit" className="bg-black text-white hover:bg-black/80">Erstellen</Button>
-          <Button type="button" variant="destructive" onClick={() => navigate('/competitions')}>Abbrechen</Button>
-        </div>
-      </form>
+      <CompetitionForm
+        initialValues={{}}
+        onSubmit={handleSubmit}
+        submitLabel="Erstellen"
+        onCancel={() => navigate('/competitions')}
+      />
     </main>
   );
 };

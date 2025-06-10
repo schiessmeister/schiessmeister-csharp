@@ -1,9 +1,7 @@
+import PlaceholderDialog from './PlaceholderDialog';
+
 const AddWriterDialog = () => {
-  return (
-    <div className="dialog">
-      <p>Schreiber hinzufügen (kommt später)</p>
-    </div>
-  );
+  return <PlaceholderDialog message="Schreiber hinzufügen" />;
 };
 
 export default AddWriterDialog;

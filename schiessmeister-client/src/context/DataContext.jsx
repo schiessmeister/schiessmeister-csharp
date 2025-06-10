@@ -1,19 +1,21 @@
 import { createContext, useContext, useState } from 'react';
-import { sampleCompetitions } from '../data/sampleData';
+import { CompetitionService } from '../services/CompetitionService';
 
 const DataContext = createContext(null);
 
 export const DataProvider = ({ children }) => {
-  const [competitions, setCompetitions] = useState(sampleCompetitions);
+  const [competitions, setCompetitions] = useState(
+    CompetitionService.getCompetitions()
+  );
 
   const addCompetition = (competition) => {
-    setCompetitions([...competitions, { ...competition, id: Date.now() }]);
+    CompetitionService.addCompetition(competition);
+    setCompetitions([...CompetitionService.getCompetitions()]);
   };
 
   const updateCompetition = (id, updated) => {
-    setCompetitions(
-      competitions.map((c) => (c.id === id ? { ...c, ...updated } : c))
-    );
+    CompetitionService.updateCompetition(id, updated);
+    setCompetitions([...CompetitionService.getCompetitions()]);
   };
 
   return (

@@ -1,9 +1,7 @@
+import PlaceholderDialog from './PlaceholderDialog';
+
 const AddDisciplineDialog = () => {
-  return (
-    <div className="dialog">
-      <p>Disziplin hinzufügen (kommt später)</p>
-    </div>
-  );
+  return <PlaceholderDialog message="Disziplin hinzufügen" />;
 };
 
 export default AddDisciplineDialog;

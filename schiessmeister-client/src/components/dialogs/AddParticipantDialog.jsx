@@ -1,9 +1,7 @@
+import PlaceholderDialog from './PlaceholderDialog';
+
 const AddParticipantDialog = () => {
-  return (
-    <div className="dialog">
-      <p>Teilnehmer hinzufügen (kommt später)</p>
-    </div>
-  );
+  return <PlaceholderDialog message="Teilnehmer hinzufügen" />;
 };
 
 export default AddParticipantDialog;
