@@ -40,7 +40,7 @@ const CompetitionLeaderboard = () => {
     <main className="min-h-screen w-full px-4 py-10 bg-background">
       <div className="mb-6">
         <Button asChild variant="outline">
-          <Link to={`/competitions/${id}`}>Zurück</Link>
+          <Link to={`/manager/competitions/${id}`}>Zurück</Link>
         </Button>
       </div>
       <h2 className="text-3xl font-bold mb-8">Rangliste - {competition.name}</h2>

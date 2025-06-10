@@ -10,7 +10,8 @@ const CompetitionOverview = () => {
 	const navigate = useNavigate();
 	const [competition, setCompetition] = useState(null);
 	const [error, setError] = useState(null);
-	const auth = useAuth();
+        const auth = useAuth();
+        const basePath = auth.role === 'manager' ? '/manager' : '/writer';
 
 	const parseResults = (participation) => {
 		let results = JSON.parse(participation.results || '[]');
@@ -62,7 +63,7 @@ const CompetitionOverview = () => {
 				{participants.map((participation) => (
 					<div key={participation.id} className="participant-item">
 						<span className="participant-name">{participation.shooter.name}</span>
-                                                <Button variant="outline" onClick={() => navigate(`/results/${id}/${participation.id}`)}>
+                                                <Button variant="outline" onClick={() => navigate(`${basePath}/results/${id}/${participation.id}`)}>
                                                         Ergebnisse
                                                 </Button>
 					</div>
@@ -89,19 +90,23 @@ const CompetitionOverview = () => {
                         <Button variant="secondary" onClick={() => window.open(`/public-leaderboard/${id}`, '_blank')}>
                                 Live Rangliste
                         </Button>
-			<ParticipantList participants={nextParticipants} title="Nächste Teilnehmer" />
-			<ParticipantList participants={completedParticipants} title="Abgeschlossene Teilnehmer" />
-                        <Button onClick={() => navigate(`/participantsList/${id}`)}>
-                                Teilnehmer verwalten
-                        </Button>
-			<div className="competition-actions">
-                                <Button variant="secondary" onClick={() => navigate(`/`)}>
+                        <ParticipantList participants={nextParticipants} title="Nächste Teilnehmer" />
+                        <ParticipantList participants={completedParticipants} title="Abgeschlossene Teilnehmer" />
+                        {auth.role === 'manager' && (
+                                <Button onClick={() => navigate(`${basePath}/participantsList/${id}`)}>
+                                        Teilnehmer verwalten
+                                </Button>
+                        )}
+                        <div className="competition-actions">
+                                <Button variant="secondary" onClick={() => navigate(`${basePath}/competitions`)}>
                                         Zurück
                                 </Button>
-                                <Button variant="secondary" onClick={handleDeleteCompetition}>
-                                        Wettbewerb löschen
-                                </Button>
-			</div>
+                                {auth.role === 'manager' && (
+                                        <Button variant="secondary" onClick={handleDeleteCompetition}>
+                                                Wettbewerb löschen
+                                        </Button>
+                                )}
+                        </div>
 		</main>
 	);
 };

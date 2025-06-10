@@ -8,7 +8,7 @@ const CreateCompetition = () => {
 
   const handleSubmit = (data) => {
     addCompetition(data);
-    navigate('/competitions');
+    navigate('/manager/competitions');
   };
 
   return (
@@ -17,7 +17,7 @@ const CreateCompetition = () => {
         initialValues={{}}
         onSubmit={handleSubmit}
         submitLabel="Erstellen"
-        onCancel={() => navigate('/competitions')}
+        onCancel={() => navigate('/manager/competitions')}
       />
     </main>
   );

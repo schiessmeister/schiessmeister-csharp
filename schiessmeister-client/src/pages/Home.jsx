@@ -25,9 +25,9 @@ const Home = () => {
 		fetchCompetitions();
 	}, [auth]);
 
-	const handleCompetitionClick = (id) => {
-		navigate(`/competition/${id}`);
-	};
+        const handleCompetitionClick = (id) => {
+                navigate(`/manager/competitions/${id}`);
+        };
 
 	const handleDeleteAccount = async () => {
 		if (window.confirm('Möchten Sie Ihr Konto wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.')) {

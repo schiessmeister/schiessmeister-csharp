@@ -79,7 +79,7 @@ function flattenGroups(groups, prefix = '') {
   }, []);
 }
 
-const CompetitionDetail = () => {
+const CompetitionDetail = ({ editable = true }) => {
   const { id } = useParams();
   const { competitions } = useData();
   const competition = competitions.find((c) => c.id === parseInt(id));
@@ -120,13 +120,15 @@ const CompetitionDetail = () => {
 
   if (!competition) return <div>Wettbewerb nicht gefunden</div>;
 
+  const basePath = '/manager';
+
   return (
     <main className="min-h-screen w-full px-4 py-10 bg-background">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-8 border-b pb-2">
           <h2 className="text-3xl font-bold">{competition.name}</h2>
           <Button asChild variant="outline" className="ml-4">
-            <Link to={`/competitions/${id}/leaderboard`}>Leaderboard öffnen</Link>
+            <Link to={`${basePath}/competitions/${id}/leaderboard`}>Leaderboard öffnen</Link>
           </Button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-start">
@@ -151,14 +153,15 @@ const CompetitionDetail = () => {
           </div>
           <div className="col-span-1 flex flex-col items-center">
             <label className="block font-medium mb-2">Teilnehmergruppen</label>
-            <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-              <DialogTrigger asChild>
-                <Button className="mb-4 w-full" variant="outline">Gruppe hinzufügen</Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Neue Teilnehmergruppe</DialogTitle>
-                </DialogHeader>
+            {editable && (
+              <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button className="mb-4 w-full" variant="outline">Gruppe hinzufügen</Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Neue Teilnehmergruppe</DialogTitle>
+                  </DialogHeader>
                 <Input
                   placeholder="Gruppenname"
                   value={newGroupName}
@@ -182,8 +185,9 @@ const CompetitionDetail = () => {
                     <Button variant="secondary">Abbrechen</Button>
                   </DialogClose>
                 </DialogFooter>
-              </DialogContent>
-            </Dialog>
+                </DialogContent>
+              </Dialog>
+            )}
             <div className="w-full mt-4 bg-white border rounded-lg p-2 shadow-sm min-h-[80px]">
               <TreeView data={mapGroupsToTree(groups)} />
             </div>
@@ -191,11 +195,13 @@ const CompetitionDetail = () => {
         </div>
         <div className="flex justify-between mt-16">
           <Button asChild variant="outline">
-            <Link to="/competitions">Zurück</Link>
+            <Link to={`${basePath}/competitions`}>Zurück</Link>
           </Button>
-          <Button asChild variant="outline">
-            <Link to={`/competitions/${id}/edit`}>Bearbeiten</Link>
-          </Button>
+          {editable && (
+            <Button asChild variant="outline">
+              <Link to={`${basePath}/competitions/${id}/edit`}>Bearbeiten</Link>
+            </Button>
+          )}
         </div>
       </div>
     </main>
