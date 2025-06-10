@@ -8,6 +8,7 @@ import Results from './pages/Results';
 import CreateParticipantGroup from './pages/CreateParticipantGroup';
 import EditParticipantGroup from './pages/EditParticipantGroup';
 import Logout from './pages/Logout';
+import CompetitionLeaderboard from './pages/CompetitionLeaderboard';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import { StrictMode } from 'react';
@@ -15,12 +16,28 @@ import { createRoot } from 'react-dom/client';
 import { AuthProvider } from './context/AuthContext';
 import { DataProvider } from './context/DataContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuLink } from '@/components/ui/navigation-menu';
+import { Shield } from 'lucide-react';
 
 export default function App() {
         return (
                 <BrowserRouter>
                         <AuthProvider>
                                 <DataProvider>
+                                        {/* Navbar */}
+                                        <nav className="w-full border-b bg-white flex items-center px-4 py-2 mb-4">
+                                                <Shield className="mr-4 text-primary" size={32} />
+                                                <NavigationMenu>
+                                                        <NavigationMenuList>
+                                                                <NavigationMenuItem>
+                                                                        <NavigationMenuLink href="/competitions">Wettbewerbe</NavigationMenuLink>
+                                                                </NavigationMenuItem>
+                                                                <NavigationMenuItem>
+                                                                        <NavigationMenuLink href="/competitions/new">Neuer Wettbewerb</NavigationMenuLink>
+                                                                </NavigationMenuItem>
+                                                        </NavigationMenuList>
+                                                </NavigationMenu>
+                                        </nav>
                                         <Routes>
                                                 {/* Public routes */}
                                                 <Route path="login" element={<Login />} />
@@ -36,6 +53,7 @@ export default function App() {
                                                         <Route path="results" element={<Results />} />
                                                         <Route path="participant-groups/new" element={<CreateParticipantGroup />} />
                                                         <Route path="participant-groups/:id/edit" element={<EditParticipantGroup />} />
+                                                        <Route path="competitions/:id/leaderboard" element={<CompetitionLeaderboard />} />
                                                 </Route>
 
                                                 {/* Redirects */}

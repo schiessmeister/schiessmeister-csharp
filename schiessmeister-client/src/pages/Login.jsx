@@ -1,13 +1,14 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { loginRequest } from '../api/authService';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
-	const [username, setUsername] = useState('');
+	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
 	const { login } = useAuth();
@@ -16,37 +17,57 @@ const Login = () => {
 		e.preventDefault();
 		setError('');
 
-               try {
-                        const data = await loginRequest(username, password);
-                        login(data.token, data.id);
-                } catch (error) {
-                        setError('Invalid username or password');
-                        console.error('Login error:', error);
-                }
+		try {
+			const data = await loginRequest(email, password);
+			login(data.token, data.id);
+		} catch (error) {
+			setError('Invalid email or password');
+			console.error('Login error:', error);
+		}
 	};
 
 	return (
-		<main>
-			<h2>Melde dich an</h2>
-
-                        <form onSubmit={handleSubmit}>
-                                <div>
-                                        <Label htmlFor="username">Username</Label>
-                                        <Input id="username" name="username" type="text" required placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
-                                </div>
-
-                                <div>
-                                        <Label htmlFor="password">Passwort</Label>
-                                        <Input id="password" name="password" type="password" required placeholder="Passwort" value={password} onChange={(e) => setPassword(e.target.value)} />
-                                </div>
-
-                                {error && <div>{error}</div>}
-
-                                <Button type="submit">Anmelden</Button>
-                        </form>
-
-			<Link to="/register">Sie haben keinen Account? Registrieren</Link>
-		</main>
+		<div className="min-h-screen flex flex-col items-center justify-center bg-white">
+			<Card className="w-full max-w-sm mt-[-4rem]">
+				<CardHeader className="items-center">
+					<CardTitle className="text-3xl font-bold mb-2">Schießmeister</CardTitle>
+					<div className="w-full border-b border-gray-200 my-2" />
+				</CardHeader>
+				<CardContent>
+					<form onSubmit={handleSubmit} className="flex flex-col gap-4">
+						<div>
+							<Input
+								id="email"
+								name="email"
+								type="email"
+								required
+								placeholder="Email"
+								value={email}
+								onChange={(e) => setEmail(e.target.value)}
+								autoComplete="email"
+							/>
+						</div>
+						<div>
+							<Input
+								id="password"
+								name="password"
+								type="password"
+								required
+								placeholder="Passwort"
+								value={password}
+								onChange={(e) => setPassword(e.target.value)}
+								autoComplete="current-password"
+							/>
+						</div>
+						{error && <div className="text-red-600 text-sm -mt-2">{error}</div>}
+						<Button type="submit" className="w-full mt-2">Login</Button>
+					</form>
+					<div className="mt-6 text-center">
+						<Link to="/register" className="text-sm text-muted-foreground hover:underline">Sie haben keinen Account? Registrieren</Link>
+					</div>
+				</CardContent>
+			</Card>
+		</div>
 	);
 };
 
