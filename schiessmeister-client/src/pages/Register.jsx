@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { API_BASE_URL } from '../utils/api';
+import { registerRequest, loginRequest } from '../api/authService';
 
 const Register = () => {
 	const [username, setUsername] = useState('');
@@ -14,39 +14,14 @@ const Register = () => {
 		e.preventDefault();
 		setError('');
 
-		try {
-			const response = await fetch(API_BASE_URL + '/authenticate/register', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ username, email, password })
-			});
-
-			if (!response.ok) {
-				const errorData = await response.json();
-				throw new Error(errorData || 'Registration failed');
-			}
-
-			// After successful registration, automatically log in
-			const loginResponse = await fetch(API_BASE_URL + '/authenticate/login', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ username, password })
-			});
-
-			if (!loginResponse.ok) {
-				throw new Error('Registration successful but login failed');
-			}
-
-			const data = await loginResponse.json();
-			login(data.token, data.id);
-		} catch (error) {
-			setError(error.message || 'Registration failed');
-			console.error('Registration error:', error);
-		}
+               try {
+                        await registerRequest(username, email, password);
+                        const data = await loginRequest(username, password);
+                        login(data.token, data.id);
+                } catch (error) {
+                        setError(error.message || 'Registration failed');
+                        console.error('Registration error:', error);
+                }
 	};
 
 	return (

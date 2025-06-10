@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { API_BASE_URL } from '../utils/api';
+import { loginRequest } from '../api/authService';
 
 const Login = () => {
 	const [username, setUsername] = useState('');
@@ -13,25 +13,13 @@ const Login = () => {
 		e.preventDefault();
 		setError('');
 
-		try {
-			const response = await fetch(API_BASE_URL + '/authenticate/login', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ username, password })
-			});
-
-			if (!response.ok) {
-				throw new Error('Login failed');
-			}
-
-			const data = await response.json();
-			login(data.token, data.id);
-		} catch (error) {
-			setError('Invalid username or password');
-			console.error('Login error:', error);
-		}
+               try {
+                        const data = await loginRequest(username, password);
+                        login(data.token, data.id);
+                } catch (error) {
+                        setError('Invalid username or password');
+                        console.error('Login error:', error);
+                }
 	};
 
 	return (
