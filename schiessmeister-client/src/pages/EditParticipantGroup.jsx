@@ -98,7 +98,7 @@ const EditParticipantGroup = () => {
   return (
     <main className="max-w-3xl mx-auto mt-8 bg-white rounded-xl border p-8 shadow">
       <div className="mb-6 text-sm text-muted-foreground flex gap-2 items-center">
-        <Link to={`/competitions/${competition.id}`} className="hover:underline text-black">{competition.name}</Link>
+        <Link to={`/manager/competitions/${competition.id}`} className="hover:underline text-black">{competition.name}</Link>
         <span>/</span>
         <span className="text-black font-medium">{group.title || title}</span>
       </div>

@@ -12,7 +12,7 @@ const EditCompetition = () => {
 
   const handleSubmit = (data) => {
     updateCompetition(competition.id, data);
-    navigate(`/competitions/${competition.id}`);
+    navigate(`/manager/competitions/${competition.id}`);
   };
 
   return (
@@ -21,7 +21,7 @@ const EditCompetition = () => {
         initialValues={competition}
         onSubmit={handleSubmit}
         submitLabel="Speichern"
-        onCancel={() => navigate(`/competitions/${competition.id}`)}
+        onCancel={() => navigate(`/manager/competitions/${competition.id}`)}
       />
     </main>
   );

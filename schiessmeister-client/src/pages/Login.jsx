@@ -10,16 +10,17 @@ import { Link } from 'react-router-dom';
 const Login = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-	const [error, setError] = useState('');
-	const { login } = useAuth();
+        const [error, setError] = useState('');
+        const [role, setRole] = useState('manager');
+        const { login } = useAuth();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setError('');
 
 		try {
-			const data = await loginRequest(email, password);
-			login(data.token, data.id);
+                        const data = await loginRequest(email, password);
+                        login(data.token, data.id, role);
 		} catch (error) {
 			setError('Invalid email or password');
 			console.error('Login error:', error);
@@ -47,20 +48,32 @@ const Login = () => {
 								autoComplete="email"
 							/>
 						</div>
-						<div>
-							<Input
-								id="password"
-								name="password"
-								type="password"
-								required
-								placeholder="Passwort"
-								value={password}
-								onChange={(e) => setPassword(e.target.value)}
-								autoComplete="current-password"
-							/>
-						</div>
-						{error && <div className="text-red-600 text-sm -mt-2">{error}</div>}
-						<Button type="submit" className="w-full mt-2">Login</Button>
+                                               <div>
+                                                       <Input
+                                                               id="password"
+                                                               name="password"
+                                                               type="password"
+                                                               required
+                                                               placeholder="Passwort"
+                                                               value={password}
+                                                               onChange={(e) => setPassword(e.target.value)}
+                                                               autoComplete="current-password"
+                                                       />
+                                               </div>
+                                               <div>
+                                                       <Label htmlFor="role">Bereich</Label>
+                                                       <select
+                                                               id="role"
+                                                               className="w-full border rounded-md px-3 py-2"
+                                                               value={role}
+                                                               onChange={(e) => setRole(e.target.value)}
+                                                       >
+                                                               <option value="manager">Manager</option>
+                                                               <option value="writer">Writer</option>
+                                                       </select>
+                                               </div>
+                                               {error && <div className="text-red-600 text-sm -mt-2">{error}</div>}
+                                               <Button type="submit" className="w-full mt-2">Login</Button>
 					</form>
 					<div className="mt-6 text-center">
 						<Link to="/register" className="text-sm text-muted-foreground hover:underline">Sie haben keinen Account? Registrieren</Link>

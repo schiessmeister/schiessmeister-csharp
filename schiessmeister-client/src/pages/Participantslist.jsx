@@ -192,7 +192,7 @@ const ParticipantsList = () => {
                                         <Button variant="outline" className="add-shooter-btn" onClick={handleCreateShooter}>
                                                 + Teilnehmer erstellen
                                         </Button>
-                                        <Button className="back-btn" onClick={() => navigate(`/competition/${id}`)}>
+                                        <Button className="back-btn" onClick={() => navigate(`/manager/competitions/${id}`)}>
                                                 Zurück
                                         </Button>
 				</div>

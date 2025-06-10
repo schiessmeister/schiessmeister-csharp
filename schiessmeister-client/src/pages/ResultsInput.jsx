@@ -66,8 +66,8 @@ const ResultsInput = () => {
 				...competition,
 				participations: updatedParticipations
 			};
-			await updateCompetition(competitionId, updatedCompetition, auth);
-			navigate(`/competition/${competitionId}`);
+                        await updateCompetition(competitionId, updatedCompetition, auth);
+                        navigate(`/writer/competitions/${competitionId}`);
 		} catch (err) {
 			setError('Failed to save results');
 			console.error(err);
@@ -120,7 +120,7 @@ const ResultsInput = () => {
                         </div>
 
                         <div className="action-buttons">
-                                <Button variant="secondary" className="reset-btn" onClick={() => navigate(`/competition/${competitionId}`)}>
+                                <Button variant="secondary" className="reset-btn" onClick={() => navigate(`/writer/competitions/${competitionId}`)}>
                                         Abbrechen
                                 </Button>
                                 <Button onClick={handleSave}>
