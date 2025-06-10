@@ -1,4 +1,6 @@
-export const sampleCompetitions = [
+import { Competition } from '../types'
+
+export const sampleCompetitions: Competition[] = [
   {
     id: 1,
     name: 'Vereinsmeisterschaft',

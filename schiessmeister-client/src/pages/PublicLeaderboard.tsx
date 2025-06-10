@@ -8,7 +8,11 @@ import '../styles/PublicLeaderboard.css';
 import { BASE_URL } from '../utils/api';
 import { getSubscriptionDetails } from '../api/authService';
 
-const LeaderboardGrid = ({ participations }) => {
+interface GridProps {
+  participations: any[]
+}
+
+const LeaderboardGrid: React.FC<GridProps> = ({ participations }) => {
 	return (
 		<div className="leaderboard-grid">
 			{participations.map((participation, index) => (
@@ -27,10 +31,10 @@ const LeaderboardGrid = ({ participations }) => {
 	);
 };
 
-const PublicLeaderboard = () => {
+const PublicLeaderboard: React.FC = () => {
 	const { id } = useParams();
-	const [competition, setCompetition] = useState(null);
-	const [error, setError] = useState(null);
+        const [competition, setCompetition] = useState<any>(null);
+        const [error, setError] = useState<string | null>(null);
 	const connectionRef = useRef(null);
 	const jsConfetti = useRef(null);
 

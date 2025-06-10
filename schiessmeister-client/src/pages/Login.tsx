@@ -6,13 +6,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
-const Login = () => {
+const Login: React.FC = () => {
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
 	const { login } = useAuth();
 
-	const handleSubmit = async (e) => {
+        const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		setError('');
 
@@ -32,12 +32,12 @@ const Login = () => {
                         <form onSubmit={handleSubmit}>
                                 <div>
                                         <Label htmlFor="username">Username</Label>
-                                        <Input id="username" name="username" type="text" required placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
+                                        <Input id="username" name="username" type="text" required placeholder="Username" value={username} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)} />
                                 </div>
 
                                 <div>
                                         <Label htmlFor="password">Passwort</Label>
-                                        <Input id="password" name="password" type="password" required placeholder="Passwort" value={password} onChange={(e) => setPassword(e.target.value)} />
+                                        <Input id="password" name="password" type="password" required placeholder="Passwort" value={password} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)} />
                                 </div>
 
                                 {error && <div>{error}</div>}

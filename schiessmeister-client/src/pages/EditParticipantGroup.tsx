@@ -1,4 +1,4 @@
-const EditParticipantGroup = () => {
+const EditParticipantGroup: React.FC = () => {
   return (
     <main>
       <h2>Teilnehmergruppe bearbeiten</h2>

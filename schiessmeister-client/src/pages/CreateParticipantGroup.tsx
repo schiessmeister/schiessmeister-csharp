@@ -1,4 +1,4 @@
-const CreateParticipantGroup = () => {
+const CreateParticipantGroup: React.FC = () => {
   return (
     <main>
       <h2>Teilnehmergruppe erstellen</h2>

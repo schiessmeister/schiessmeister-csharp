@@ -4,12 +4,17 @@ import { useData } from '../context/DataContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-const CreateCompetitionForm = ({ initial = {}, onSave }) => {
+interface FormProps {
+  initial?: Record<string, string>
+  onSave: (comp: Record<string, string>) => void
+}
+
+const CreateCompetitionForm: React.FC<FormProps> = ({ initial = {}, onSave }) => {
   const [name, setName] = useState(initial.name || '');
   const [location, setLocation] = useState(initial.location || '');
   const [date, setDate] = useState(initial.date || '');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onSave({ name, location, date });
   };
