@@ -12,6 +12,8 @@ import { format } from 'date-fns';
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetClose } from '@/components/ui/sheet';
 import { Select } from '@/components/ui/select';
 import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerClose } from '@/components/ui/drawer';
+import { ReactSortable } from 'react-sortablejs';
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 const getInitials = (name) => name.split(' ').map((n) => n[0]).join('');
 
@@ -35,7 +37,7 @@ const EditParticipantGroup = () => {
   });
   const [subGroup, setSubGroup] = useState('');
   const [participations, setParticipations] = useState(group.participations);
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [newParticipation, setNewParticipation] = useState({ shooter: '', team: '', newTeam: '', discipline: '' });
   const shooters = competition.participations.map(p => p.shooter); // Demo: alle Shooter
   const teams = Array.from(new Set(competition.participations.map(p => p.team)));
@@ -43,24 +45,24 @@ const EditParticipantGroup = () => {
   const [editIndex, setEditIndex] = useState(null);
 
   const handleAddParticipation = () => {
-    if (!newParticipation.shooter || !newParticipation.discipline || (!newParticipation.team && !newParticipation.newTeam)) return;
+    if (!newParticipation.shooter || !newParticipation.discipline) return;
     setParticipations([
       ...participations,
       {
         id: Date.now(),
         shooter: shooters.find(s => s.name === newParticipation.shooter),
-        team: newParticipation.team || newParticipation.newTeam,
+        team: newParticipation.team || newParticipation.newTeam || 'Kein Team',
         discipline: newParticipation.discipline,
       },
     ]);
-    setDrawerOpen(false);
+    setDialogOpen(false);
     setNewParticipation({ shooter: '', team: '', newTeam: '', discipline: '' });
   };
 
   const openAddPanel = () => {
     setEditIndex(null);
     setNewParticipation({ shooter: '', team: '', newTeam: '', discipline: '' });
-    setDrawerOpen(true);
+    setDialogOpen(true);
   };
 
   const openEditPanel = (idx) => {
@@ -72,15 +74,15 @@ const EditParticipantGroup = () => {
       newTeam: '',
       discipline: p.discipline || '',
     });
-    setDrawerOpen(true);
+    setDialogOpen(true);
   };
 
   const handleSaveParticipation = () => {
-    if (!newParticipation.shooter || !newParticipation.discipline || (!newParticipation.team && !newParticipation.newTeam)) return;
+    if (!newParticipation.shooter || !newParticipation.discipline) return;
     const newEntry = {
       id: editIndex !== null ? participations[editIndex].id : Date.now(),
       shooter: shooters.find(s => s.name === newParticipation.shooter),
-      team: newParticipation.team || newParticipation.newTeam,
+      team: newParticipation.team || newParticipation.newTeam || 'Kein Team',
       discipline: newParticipation.discipline,
     };
     if (editIndex !== null) {
@@ -88,7 +90,7 @@ const EditParticipantGroup = () => {
     } else {
       setParticipations([...participations, newEntry]);
     }
-    setDrawerOpen(false);
+    setDialogOpen(false);
     setEditIndex(null);
     setNewParticipation({ shooter: '', team: '', newTeam: '', discipline: '' });
   };
@@ -133,74 +135,83 @@ const EditParticipantGroup = () => {
       </div>
       <hr className="my-6" />
       <div className="mb-2 font-semibold text-lg">Teilnahmen</div>
-      <div className="flex flex-col gap-2">
+      <div className="flex justify-end mb-4">
+        <Button variant="outline" onClick={openAddPanel}><Plus className="mr-2" />Neue Teilnahme hinzufügen</Button>
+      </div>
+      <ReactSortable
+        tag="div"
+        className="flex flex-col gap-2"
+        list={participations}
+        setList={setParticipations}
+        animation={200}
+        handle=".drag-handle"
+      >
         {participations.map((p, i) => (
           <Card key={p.id} className="flex items-center gap-4 px-4 py-3">
-            <div className="text-base w-6 text-center">{i + 1}</div>
+            <div className="w-6 text-center font-bold">{i + 1}</div>
+            <div className="drag-handle cursor-move text-base w-6 text-center">≡</div>
             <Avatar>
               <AvatarFallback>{getInitials(p.shooter?.name || '?')}</AvatarFallback>
             </Avatar>
-            <div className="flex-1">
+            <div className="flex-1 flex flex-col">
               <div className="font-medium">{p.shooter?.name || '-'}</div>
               <div className="text-xs text-muted-foreground">{p.shooter?.email || ''}</div>
+              <div className="text-sm font-medium mt-1">{p.discipline}</div>
             </div>
-            <div className="text-sm font-medium min-w-[100px]">{p.discipline}</div>
-            <div className="text-sm min-w-[80px]">{p.team || ''}</div>
+            <div className="text-sm min-w-[80px]">{p.team || 'Kein Team'}</div>
             <Button size="icon" variant="ghost" onClick={() => openEditPanel(i)}><Pencil /></Button>
-            <Button size="sm" variant="destructive" onClick={() => setParticipations(participations.filter((_, idx) => idx !== i))}>Löschen</Button>
+            <Button size="sm" variant="destructive" onClick={() => setParticipations(participations.filter((_, idx) => idx !== i))}><Trash2 /></Button>
           </Card>
         ))}
-        <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
-          <DrawerTrigger asChild>
-            <Button size="icon" variant="outline" onClick={openAddPanel}><Plus /></Button>
-          </DrawerTrigger>
-          <DrawerContent side="right" className="max-w-xl w-full flex flex-col justify-between px-8 py-8 rounded-l-xl shadow-xl">
-            <div className="flex-1 flex flex-col">
-              <DrawerHeader className="mb-4">
-                <DrawerTitle className="text-xl text-center md:text-left mb-4 text-green-900">{editIndex !== null ? 'Teilnahme bearbeiten' : 'Neuen Teilnehmer hinzufügen'}</DrawerTitle>
-              </DrawerHeader>
-              <form className="grid grid-cols-1 md:grid-cols-2 gap-8 flex-1">
-                <div className="flex flex-col gap-2">
-                  <label className="block font-medium mb-1">Teilnehmer</label>
-                  <Select value={newParticipation.shooter} onChange={e => setNewParticipation({ ...newParticipation, shooter: e.target.value })}>
-                    <option value="">Select</option>
-                    {shooters.map((s, i) => (
-                      <option key={i} value={s.name}>{s.name}</option>
-                    ))}
-                  </Select>
+      </ReactSortable>
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent className="max-w-xl w-full flex flex-col justify-between px-8 py-8 rounded-xl shadow-xl fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white z-50">
+          <div className="flex-1 flex flex-col">
+            <DialogHeader className="mb-4">
+              <DialogTitle className="text-xl text-center md:text-left mb-4 text-green-900">{editIndex !== null ? 'Teilnahme bearbeiten' : 'Neue Teilnahme hinzufügen'}</DialogTitle>
+            </DialogHeader>
+            <form className="grid grid-cols-1 md:grid-cols-2 gap-8 flex-1">
+              <div className="flex flex-col gap-2">
+                <label className="block font-medium mb-1">Teilnehmer</label>
+                <Select value={newParticipation.shooter} onChange={e => setNewParticipation({ ...newParticipation, shooter: e.target.value })}>
+                  <option value="">Select</option>
+                  {shooters.map((s, i) => (
+                    <option key={i} value={s.name}>{s.name}</option>
+                  ))}
+                </Select>
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="block font-medium mb-1">Team <span className="text-xs text-muted-foreground">(optional)</span></label>
+                <Select value={newParticipation.team} onChange={e => setNewParticipation({ ...newParticipation, team: e.target.value, newTeam: '' })}>
+                  <option value="">Select</option>
+                  {teams.map((t, i) => (
+                    <option key={i} value={t}>{t}</option>
+                  ))}
+                </Select>
+                <div className="flex items-center gap-2 mt-2">
+                  <Input placeholder="Neues Team (optional)" value={newParticipation.newTeam} onChange={e => setNewParticipation({ ...newParticipation, newTeam: e.target.value, team: '' })} />
+                  <Button size="icon" variant="outline" type="button"><Plus /></Button>
                 </div>
-                <div className="flex flex-col gap-2">
-                  <label className="block font-medium mb-1">Team</label>
-                  <Select value={newParticipation.team} onChange={e => setNewParticipation({ ...newParticipation, team: e.target.value, newTeam: '' })}>
-                    <option value="">Select</option>
-                    {teams.map((t, i) => (
-                      <option key={i} value={t}>{t}</option>
-                    ))}
-                  </Select>
-                  <div className="flex items-center gap-2 mt-2">
-                    <Input placeholder="Neues Team" value={newParticipation.newTeam} onChange={e => setNewParticipation({ ...newParticipation, newTeam: e.target.value, team: '' })} />
-                    <Button size="icon" variant="outline" type="button"><Plus /></Button>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-2 md:col-span-2">
-                  <label className="block font-medium mb-1">Disziplin</label>
-                  <Select value={newParticipation.discipline} onChange={e => setNewParticipation({ ...newParticipation, discipline: e.target.value })}>
-                    <option value="">Select</option>
-                    {disciplines.map((d, i) => (
-                      <option key={i} value={d}>{d}</option>
-                    ))}
-                  </Select>
-                </div>
-              </form>
-            </div>
-            <div className="flex justify-end mt-8">
-              <Button className="bg-black text-white hover:bg-black/80 min-w-[140px]" onClick={handleSaveParticipation} type="button">
+              </div>
+              <div className="flex flex-col gap-2 md:col-span-2">
+                <label className="block font-medium mb-1">Disziplin</label>
+                <Select value={newParticipation.discipline} onChange={e => setNewParticipation({ ...newParticipation, discipline: e.target.value })}>
+                  <option value="">Select</option>
+                  {disciplines.map((d, i) => (
+                    <option key={i} value={d}>{d}</option>
+                  ))}
+                </Select>
+              </div>
+            </form>
+            <div className="flex gap-4 mt-8">
+              <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Abbrechen</Button>
+              <Button type="button" onClick={editIndex !== null ? handleSaveParticipation : handleAddParticipation}>
                 {editIndex !== null ? 'Speichern' : 'Hinzufügen'}
               </Button>
             </div>
-          </DrawerContent>
-        </Drawer>
-      </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </main>
   );
 };

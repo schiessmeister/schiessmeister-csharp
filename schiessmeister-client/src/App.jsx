@@ -24,20 +24,6 @@ export default function App() {
                 <BrowserRouter>
                         <AuthProvider>
                                 <DataProvider>
-                                        {/* Navbar */}
-                                        <nav className="w-full border-b bg-white flex items-center px-4 py-2 mb-4">
-                                                <Shield className="mr-4 text-primary" size={32} />
-                                                <NavigationMenu>
-                                                        <NavigationMenuList>
-                                                                <NavigationMenuItem>
-                                                                        <NavigationMenuLink href="/competitions">Wettbewerbe</NavigationMenuLink>
-                                                                </NavigationMenuItem>
-                                                                <NavigationMenuItem>
-                                                                        <NavigationMenuLink href="/competitions/new">Neuer Wettbewerb</NavigationMenuLink>
-                                                                </NavigationMenuItem>
-                                                        </NavigationMenuList>
-                                                </NavigationMenu>
-                                        </nav>
                                         <Routes>
                                                 {/* Public routes */}
                                                 <Route path="login" element={<Login />} />

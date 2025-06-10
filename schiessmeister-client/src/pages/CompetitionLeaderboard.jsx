@@ -3,6 +3,8 @@ import { useData } from '../context/DataContext';
 import { SHOOTING_CLASSES } from '../constants/shootingClasses';
 import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
 const getInitials = (name) => name.split(' ').map((n) => n[0]).join('');
 
@@ -36,6 +38,11 @@ const CompetitionLeaderboard = () => {
 
   return (
     <main className="min-h-screen w-full px-4 py-10 bg-background">
+      <div className="mb-6">
+        <Button asChild variant="outline">
+          <Link to={`/competitions/${id}`}>Zurück</Link>
+        </Button>
+      </div>
       <h2 className="text-3xl font-bold mb-8">Rangliste - {competition.name}</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
         {Object.entries(groups).map(([dis, classes]) => (

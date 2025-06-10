@@ -66,6 +66,7 @@ const CompetitionForm = ({ initialValues, onSubmit, submitLabel, onCancel }) => 
 
   return (
     <form onSubmit={handleSubmit} className="max-w-4xl mx-auto mt-8 flex flex-col gap-8">
+      <h2 className="text-3xl font-bold mb-6">Neuen Wettbewerb erstellen</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="flex flex-col gap-6">
           <div>
@@ -159,14 +160,22 @@ const CompetitionForm = ({ initialValues, onSubmit, submitLabel, onCancel }) => 
                 </SheetHeader>
                 <div className="p-4 flex flex-col gap-4">
                   <Input placeholder="Bezeichnung" value={newDisziplin} onChange={(e) => setNewDisziplin(e.target.value)} />
-                  <div className="flex gap-4">
-                    <div>
-                      <label className="block text-xs mb-1">Anzahl Serien</label>
-                      <Input type="number" min={1} value={newDisziplinSerien} onChange={(e) => setNewDisziplinSerien(Number(e.target.value))} />
+                  <div className="flex flex-col gap-6">
+                    <div className="flex flex-col items-center w-full">
+                      <label className="block text-xs mb-2">Anzahl Serien</label>
+                      <div className="flex items-center justify-center gap-2 w-full">
+                        <Button type="button" size="icon" className="text-2xl h-14 w-14" onClick={() => setNewDisziplinSerien(v => Math.max(1, v - 1))}>-</Button>
+                        <div className="text-4xl font-mono w-24 text-center border rounded-lg h-14 flex items-center justify-center select-none bg-white">{String(newDisziplinSerien).padStart(3, '0')}</div>
+                        <Button type="button" size="icon" className="text-2xl h-14 w-14" onClick={() => setNewDisziplinSerien(v => Math.min(999, v + 1))}>+</Button>
+                      </div>
                     </div>
-                    <div>
-                      <label className="block text-xs mb-1">Anzahl Schüsse</label>
-                      <Input type="number" min={1} value={newDisziplinSchuesse} onChange={(e) => setNewDisziplinSchuesse(Number(e.target.value))} />
+                    <div className="flex flex-col items-center w-full">
+                      <label className="block text-xs mb-2">Anzahl Schüsse</label>
+                      <div className="flex items-center justify-center gap-2 w-full">
+                        <Button type="button" size="icon" className="text-2xl h-14 w-14" onClick={() => setNewDisziplinSchuesse(v => Math.max(1, v - 1))}>-</Button>
+                        <div className="text-4xl font-mono w-24 text-center border rounded-lg h-14 flex items-center justify-center select-none bg-white">{String(newDisziplinSchuesse).padStart(3, '0')}</div>
+                        <Button type="button" size="icon" className="text-2xl h-14 w-14" onClick={() => setNewDisziplinSchuesse(v => Math.min(999, v + 1))}>+</Button>
+                      </div>
                     </div>
                   </div>
                   <Button type="button" onClick={() => { if (newDisziplin) { setDisziplinen([...disziplinen, { name: newDisziplin, serien: newDisziplinSerien, schuesse: newDisziplinSchuesse }]); setNewDisziplin(''); setNewDisziplinSerien(1); setNewDisziplinSchuesse(1); setSheetDisziplinOpen(false); setErrorKlassen(klassen.length + 1 > 0 ? '' : errorKlassen); } }}>

@@ -38,7 +38,7 @@ export function WriterMultiCombobox({
           <Button
             type="button"
             variant="outline"
-            className="w-full justify-between"
+            className="w-full justify-between border border-input shadow-xs rounded-md bg-white focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             disabled={disabled}
             aria-expanded={open}
           >
@@ -50,7 +50,7 @@ export function WriterMultiCombobox({
             <ChevronDownIcon className="ml-2 size-4 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-[var(--radix-popover-trigger-width)] min-w-[220px] p-0">
+        <PopoverContent className="w-[var(--radix-popover-trigger-width)] min-w-[220px] p-0 border-none shadow-none">
           <Command>
             <CommandInput placeholder="Suchen..." />
             <CommandList>

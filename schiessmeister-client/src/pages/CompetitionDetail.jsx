@@ -6,6 +6,8 @@ import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, Dialog
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Pencil, Folder, File } from 'lucide-react';
+import { format } from 'date-fns';
+import { de } from 'date-fns/locale';
 
 const KlassenList = ({ klassen, onRemove }) => (
   <div>
@@ -58,11 +60,23 @@ function mapGroupsToTree(groups) {
     icon: g.subParticipationGroups && g.subParticipationGroups.length > 0 ? Folder : File,
     children: g.subParticipationGroups && g.subParticipationGroups.length > 0 ? mapGroupsToTree(g.subParticipationGroups) : undefined,
     actions: (
-      <Button asChild size="icon" variant="ghost">
-        <Link to={`/participant-groups/${g.id}/edit`}><Pencil /></Link>
-      </Button>
+      <Link to={`/participant-groups/${g.id}/edit`} className="ml-2 align-middle text-muted-foreground hover:text-black transition-colors">
+        <Pencil className="w-4 h-4" />
+      </Link>
     ),
   }));
+}
+
+// Hilfsfunktion für alle Gruppen als Flat-Array (für Select)
+function flattenGroups(groups, prefix = '') {
+  return groups.reduce((acc, g) => {
+    const label = prefix ? `${prefix} / ${g.title}` : g.title;
+    acc.push({ id: g.id, label });
+    if (g.subParticipationGroups && g.subParticipationGroups.length > 0) {
+      acc = acc.concat(flattenGroups(g.subParticipationGroups, label));
+    }
+    return acc;
+  }, []);
 }
 
 const CompetitionDetail = () => {
@@ -71,13 +85,35 @@ const CompetitionDetail = () => {
   const competition = competitions.find((c) => c.id === parseInt(id));
   const [dialogOpen, setDialogOpen] = useState(false);
   const [newGroupName, setNewGroupName] = useState('');
+  const [parentGroupId, setParentGroupId] = useState('');
   // TODO: persistieren, aktuell nur Demo
   const [groups, setGroups] = useState(competition?.participantGroups || []);
 
   const handleAddGroup = () => {
     if (newGroupName.trim()) {
-      setGroups([...groups, { id: Date.now().toString(), name: newGroupName }]);
+      const newGroup = {
+        id: Date.now().toString(),
+        title: newGroupName,
+        startDateTime: '',
+        endDateTime: '',
+        participations: [],
+        subParticipationGroups: [],
+      };
+      if (parentGroupId) {
+        // Füge als Subgruppe hinzu
+        const addSubGroup = (groups) =>
+          groups.map(g =>
+            g.id === parentGroupId
+              ? { ...g, subParticipationGroups: [...(g.subParticipationGroups || []), newGroup] }
+              : { ...g, subParticipationGroups: g.subParticipationGroups ? addSubGroup(g.subParticipationGroups) : [] }
+          );
+        setGroups(addSubGroup(groups));
+      } else {
+        // Top-Level-Gruppe
+        setGroups([...groups, newGroup]);
+      }
       setNewGroupName('');
+      setParentGroupId('');
       setDialogOpen(false);
     }
   };
@@ -102,7 +138,7 @@ const CompetitionDetail = () => {
               </div>
               <div>
                 <label className="block font-medium mb-1">Datum</label>
-                <input className="w-full border border-gray-300 rounded-md bg-white px-3 py-2 text-black" value={competition.date || ''} readOnly />
+                <input className="w-full border border-gray-300 rounded-md bg-white px-3 py-2 text-black" value={competition.date ? format(new Date(competition.date), 'dd. MMMM yyyy, HH:mm', { locale: de }) : ''} readOnly />
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -129,6 +165,17 @@ const CompetitionDetail = () => {
                   onChange={e => setNewGroupName(e.target.value)}
                   className="mb-4"
                 />
+                <label className="block font-medium mb-1">Übergeordnete Gruppe</label>
+                <select
+                  className="w-full border rounded px-3 py-2 mb-4"
+                  value={parentGroupId}
+                  onChange={e => setParentGroupId(e.target.value)}
+                >
+                  <option value="">(Top-Level)</option>
+                  {flattenGroups(groups).map(g => (
+                    <option key={g.id} value={g.id}>{g.label}</option>
+                  ))}
+                </select>
                 <DialogFooter>
                   <Button onClick={handleAddGroup} disabled={!newGroupName.trim()} className="bg-black text-white hover:bg-black/80">Speichern</Button>
                   <DialogClose asChild>
