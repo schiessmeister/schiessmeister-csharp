@@ -1,15 +1,13 @@
-import { createApi } from '../utils/api'
-import type { AuthContextType } from '../context/AuthContext'
-import type { Competition } from '../types'
+import { createApi } from '../utils/api';
 
-export const getCompetitions = async (auth: AuthContextType) => {
-        if (!auth.userId) throw new Error('User not authenticated');
+export const getCompetitions = async (auth) => {
+	if (!auth.userId) throw new Error('User not authenticated');
 
 	const api = createApi(auth.token, auth.handleUnauthorized);
 	return api.get(`/users/${auth.userId}/competitions`);
 };
 
-export const getCompetition = async (id: string | number, auth: AuthContextType | null = null) => {
+export const getCompetition = async (id, auth = null) => {
 	if (auth) {
 		const api = createApi(auth.token, auth.handleUnauthorized);
 		return api.get(`/competition/${id}`);
@@ -19,11 +17,7 @@ export const getCompetition = async (id: string | number, auth: AuthContextType 
 	return api.get(`/competition/${id}`);
 };
 
-export const updateCompetition = async (
-  id: string | number,
-  competitionData: Competition,
-  auth: AuthContextType
-) => {
+export const updateCompetition = async (id, competitionData, auth) => {
 	const api = createApi(auth.token, auth.handleUnauthorized);
 
 	competitionData = {
@@ -39,22 +33,22 @@ export const updateCompetition = async (
 	return api.put(`/competition/${id}`, competitionData);
 };
 
-export const getShooters = async (auth: AuthContextType) => {
+export const getShooters = async (auth) => {
 	const api = createApi(auth.token, auth.handleUnauthorized);
 	return api.get('/shooter');
 };
 
-export const createShooter = async (name: string, auth: AuthContextType) => {
+export const createShooter = async (name, auth) => {
 	const api = createApi(auth.token, auth.handleUnauthorized);
 	return api.post('/shooter', { name });
 };
 
-export const deleteUser = async (userId: string | number, auth: AuthContextType) => {
+export const deleteUser = async (userId, auth) => {
 	const api = createApi(auth.token, auth.handleUnauthorized);
 	return api.delete(`/users/${userId}`);
 };
 
-export const deleteCompetition = async (id: string | number, auth: AuthContextType) => {
+export const deleteCompetition = async (id, auth) => {
 	const api = createApi(auth.token, auth.handleUnauthorized);
 	return api.delete(`/competition/${id}`);
 };

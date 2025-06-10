@@ -1,24 +1,18 @@
 export const BASE_URL = 'https://localhost:7087';
 export const API_BASE_URL = BASE_URL + '/api';
 
-export const createApi = (
-  token: string | null = null,
-  handleUnauthorized: (() => void) | null = null
-) => {
-        const fetchWithAuth = async (
-          endpoint: string,
-          options: RequestInit = {}
-        ) => {
-                const headers = {
-                        'Content-Type': 'application/json',
-                        ...(token && { Authorization: `Bearer ${token}` }),
-                        ...options.headers
-                };
+export const createApi = (token = null, handleUnauthorized = null) => {
+	const fetchWithAuth = async (endpoint, options = {}) => {
+		const headers = {
+			'Content-Type': 'application/json',
+			...(token && { Authorization: `Bearer ${token}` }),
+			...options.headers
+		};
 
-        const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-                        ...options,
-                        headers
-                });
+		const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+			...options,
+			headers
+		});
 
 		if (response.status === 401 && handleUnauthorized) {
 			handleUnauthorized();

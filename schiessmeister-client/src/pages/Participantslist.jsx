@@ -6,15 +6,15 @@ import '../styles/Participantslist.css';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-const ParticipantsList: React.FC = () => {
+const ParticipantsList = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
 	const auth = useAuth();
 
-        const [competition, setCompetition] = useState<any>(null);
-        const [availableShooters, setAvailableShooters] = useState<any[]>([]);
-        const [newShooterName, setNewShooterName] = useState('');
-        const [error, setError] = useState<string | null>(null);
+	const [competition, setCompetition] = useState(null);
+	const [availableShooters, setAvailableShooters] = useState([]);
+	const [newShooterName, setNewShooterName] = useState('');
+	const [error, setError] = useState(null);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -33,9 +33,9 @@ const ParticipantsList: React.FC = () => {
 		fetchData();
 	}, [id, auth]);
 
-        const getMaxOrderNb = () => Math.max(...competition.participations.map((p: any) => parseInt(p.orderNb)), 0);
+	const getMaxOrderNb = () => Math.max(...competition.participations.map((p) => parseInt(p.orderNb)), 0);
 
-        const handleCreateShooter = async () => {
+	const handleCreateShooter = async () => {
 		if (!newShooterName.trim()) return;
 
 		try {
@@ -48,7 +48,7 @@ const ParticipantsList: React.FC = () => {
 		}
 	};
 
-        const handleAddParticipant = async (shooterId: number) => {
+	const handleAddParticipant = async (shooterId) => {
 		try {
 			// Create new participation
 			const newParticipation = {
@@ -75,7 +75,7 @@ const ParticipantsList: React.FC = () => {
 		}
 	};
 
-        const handleRemoveParticipant = async (participationId: number) => {
+	const handleRemoveParticipant = async (participationId) => {
 		try {
 			// Update competition without the removed participation
 			const updatedCompetition = {
@@ -97,7 +97,7 @@ const ParticipantsList: React.FC = () => {
 		}
 	};
 
-        const handleMoveParticipant = async (participationId: number, direction: 'up' | 'down') => {
+	const handleMoveParticipant = async (participationId, direction) => {
 		try {
 			// Create a copy of participations to work with
 			const updatedParticipations = [...competition.participations];

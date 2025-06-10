@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 
-const Logout: React.FC = () => {
+const Logout = () => {
 	const { logout } = useAuth();
 
 	useEffect(() => {

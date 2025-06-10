@@ -5,20 +5,20 @@ import { useAuth } from '../context/AuthContext';
 import '../styles/CompetitionOverview.css';
 import { Button } from '@/components/ui/button';
 
-const CompetitionOverview: React.FC = () => {
+const CompetitionOverview = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
-        const [competition, setCompetition] = useState<any>(null);
-        const [error, setError] = useState<string | null>(null);
+	const [competition, setCompetition] = useState(null);
+	const [error, setError] = useState(null);
 	const auth = useAuth();
 
-        const parseResults = (participation: any) => {
+	const parseResults = (participation) => {
 		let results = JSON.parse(participation.results || '[]');
 		if (!Array.isArray(results)) results = [];
 		return results;
 	};
 
-        const filterParticipations = (participation: any, isCompleted: boolean) => {
+	const filterParticipations = (participation, isCompleted) => {
 		const results = parseResults(participation);
 		return isCompleted ? results.length === 5 : results.length < 5;
 	};
@@ -37,7 +37,7 @@ const CompetitionOverview: React.FC = () => {
 		fetchCompetition();
 	}, [id, auth]);
 
-        const handleDeleteCompetition = async () => {
+	const handleDeleteCompetition = async () => {
 		if (window.confirm('Möchten Sie diesen Wettbewerb wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.')) {
 			try {
 				await deleteCompetition(id, auth);

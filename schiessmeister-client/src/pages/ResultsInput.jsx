@@ -9,14 +9,14 @@ import { Input } from '@/components/ui/input';
 import { Select } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 
-const ResultsInput: React.FC = () => {
+const ResultsInput = () => {
 	const { competitionId, participationId } = useParams();
 	const navigate = useNavigate();
-        const [competition, setCompetition] = useState<any>(null);
-        const [participation, setParticipation] = useState<any>(null);
-        const [results, setResults] = useState<number[]>([]);
-        const [error, setError] = useState<string | null>(null);
-        const [shootingClass, setShootingClass] = useState('MEN');
+	const [competition, setCompetition] = useState(null);
+	const [participation, setParticipation] = useState(null);
+	const [results, setResults] = useState([]);
+	const [error, setError] = useState(null);
+	const [shootingClass, setShootingClass] = useState('MEN');
 	const auth = useAuth();
 
 	useEffect(() => {
@@ -42,7 +42,7 @@ const ResultsInput: React.FC = () => {
 		fetchCompetition();
 	}, [competitionId, participationId, auth]);
 
-        const handleNumberClick = (number: number) => {
+	const handleNumberClick = (number) => {
 		if (results.length < 5) {
 			setResults([...results, number]);
 		}
@@ -52,7 +52,7 @@ const ResultsInput: React.FC = () => {
 		setResults(results.slice(0, -1));
 	};
 
-        const handleSave = async () => {
+	const handleSave = async () => {
 		try {
 			const updatedParticipation = {
 				...participation,
@@ -109,7 +109,7 @@ const ResultsInput: React.FC = () => {
 
 				<div className="shooting-class-select">
                                         <Label htmlFor="shootingClass">Schützenklasse:</Label>
-                                        <Select id="shootingClass" value={shootingClass} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setShootingClass(e.target.value)}>
+                                        <Select id="shootingClass" value={shootingClass} onChange={(e) => setShootingClass(e.target.value)}>
                                                 {SHOOTING_CLASSES.map(({ key, value }) => (
                                                         <option key={key} value={key}>
                                                                 {value}

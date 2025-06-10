@@ -5,9 +5,9 @@ import { useAuth } from '../context/AuthContext';
 import '../styles/Home.css';
 import { Button } from "@/components/ui/button"
 
-const Home: React.FC = () => {
-        const [competitions, setCompetitions] = useState<any[]>([]);
-        const [error, setError] = useState<string | null>(null);
+const Home = () => {
+	const [competitions, setCompetitions] = useState([]);
+	const [error, setError] = useState(null);
 	const navigate = useNavigate();
 	const auth = useAuth();
 
@@ -25,7 +25,7 @@ const Home: React.FC = () => {
 		fetchCompetitions();
 	}, [auth]);
 
-        const handleCompetitionClick = (id: number) => {
+	const handleCompetitionClick = (id) => {
 		navigate(`/competition/${id}`);
 	};
 

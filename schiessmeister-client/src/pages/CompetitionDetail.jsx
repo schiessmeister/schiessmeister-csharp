@@ -2,7 +2,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useData } from '../context/DataContext';
 import { Button } from '@/components/ui/button';
 
-const CompetitionDetail: React.FC = () => {
+const CompetitionDetail = () => {
   const { id } = useParams();
   const { competitions } = useData();
   const competition = competitions.find((c) => c.id === parseInt(id));
