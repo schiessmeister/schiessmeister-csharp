@@ -12,19 +12,23 @@ const Login = () => {
 	const [password, setPassword] = useState('');
         const [error, setError] = useState('');
         const [role, setRole] = useState('manager');
+        const [isLoading, setIsLoading] = useState(false);
         const { login } = useAuth();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setError('');
+                setIsLoading(true);
 
 		try {
-                        const data = await loginRequest(email, password);
-                        login(data.token, data.id, role);
+                        const data = await loginRequest(email, password, role);
+                        login(data.token, data.id, data.role);
 		} catch (error) {
-			setError('Invalid email or password');
+			setError(error.message || 'Ungültige E-Mail oder Passwort');
 			console.error('Login error:', error);
-		}
+		} finally {
+                    setIsLoading(false);
+                }
 	};
 
 	return (
@@ -46,6 +50,7 @@ const Login = () => {
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
 								autoComplete="email"
+                                                                disabled={isLoading}
 							/>
 						</div>
                                                <div>
@@ -58,6 +63,7 @@ const Login = () => {
                                                                value={password}
                                                                onChange={(e) => setPassword(e.target.value)}
                                                                autoComplete="current-password"
+                                                               disabled={isLoading}
                                                        />
                                                </div>
                                                <div>
@@ -67,13 +73,16 @@ const Login = () => {
                                                                className="w-full border rounded-md px-3 py-2"
                                                                value={role}
                                                                onChange={(e) => setRole(e.target.value)}
+                                                               disabled={isLoading}
                                                        >
                                                                <option value="manager">Manager</option>
                                                                <option value="writer">Writer</option>
                                                        </select>
                                                </div>
                                                {error && <div className="text-red-600 text-sm -mt-2">{error}</div>}
-                                               <Button type="submit" className="w-full mt-2">Login</Button>
+                                               <Button type="submit" className="w-full mt-2" disabled={isLoading}>
+                                                   {isLoading ? 'Wird angemeldet...' : 'Login'}
+                                               </Button>
 					</form>
 					<div className="mt-6 text-center">
 						<Link to="/register" className="text-sm text-muted-foreground hover:underline">Sie haben keinen Account? Registrieren</Link>

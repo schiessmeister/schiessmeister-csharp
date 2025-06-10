@@ -1,6 +1,6 @@
 import React from 'react'
 import * as AccordionPrimitive from '@radix-ui/react-accordion'
-import { ChevronRight } from 'lucide-react'
+import { ChevronRight, Users } from 'lucide-react'
 import { cva } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
@@ -171,9 +171,9 @@ const TreeItem = React.forwardRef<HTMLDivElement, TreeItemProps>(
         }
         return (
             <div ref={ref} role="tree" className={className} {...props}>
-                <ul>
+                <ul className="pl-2 space-y-1">
                     {data.map((item) => (
-                        <li key={item.id}>
+                        <li key={item.id} className="py-1">
                             {item.children ? (
                                 <TreeNode
                                     item={item}
@@ -451,19 +451,7 @@ const TreeIcon = ({
     isSelected?: boolean
     default?: any
 }) => {
-    let Icon = defaultIcon
-    if (isSelected && item.selectedIcon) {
-        Icon = item.selectedIcon
-    } else if (isOpen && item.openIcon) {
-        Icon = item.openIcon
-    } else if (item.icon) {
-        Icon = item.icon
-    }
-    return Icon ? (
-        <Icon className="h-4 w-4 shrink-0 mr-2" />
-    ) : (
-        <></>
-    )
+    return <Users className="w-4 h-4 mr-1" />;
 }
 
 const TreeActions = ({

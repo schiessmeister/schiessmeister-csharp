@@ -1,8 +1,13 @@
 import { createApi } from '../utils/api';
 
-export const loginRequest = async (username, password) => {
-    // MOCK: Immer Erfolg, egal welche Daten
-    return Promise.resolve({ token: 'mock-token', id: 1 });
+export const loginRequest = async (email, password, role) => {
+    // Temporärer Mock-Login: Akzeptiert beliebige Zugangsdaten
+    console.log('Mock-Login mit:', { email, password, role });
+    return Promise.resolve({
+        token: 'mock-token-' + Math.random().toString(36).substring(7),
+        id: Math.floor(Math.random() * 1000),
+        role: role // Verwende die ausgewählte Rolle
+    });
 };
 
 export const registerRequest = async (username, email, password) => {

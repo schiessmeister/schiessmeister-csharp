@@ -20,15 +20,17 @@ const getInitials = (name) => name.split(' ').map((n) => n[0]).join('');
 const EditParticipantGroup = () => {
   const { id } = useParams(); // id der Gruppe
   const { competitions } = useData();
-  // Demo: hole erste Competition und erste Gruppe
-  const competition = competitions[0];
-  const group = competition.participantGroups?.find((g) => g.id === id) || {
-    title: 'Teilnehmergruppe X',
-    startDateTime: new Date('2023-06-13'),
-    endDateTime: new Date('2023-07-14'),
-    participations: competition.participations?.slice(0, 3) || [],
-    subParticipationGroups: [],
-  };
+  // Suche die Competition und Gruppe in allen Wettbewerben
+  let found = null;
+  for (const c of competitions) {
+    const g = c.participantGroups?.find(g => String(g.id) === String(id));
+    if (g) {
+      found = { competition: c, group: g };
+      break;
+    }
+  }
+  if (!found) return <div>Gruppe nicht gefunden</div>;
+  const { competition, group } = found;
 
   const [title, setTitle] = useState(group.title);
   const [dateRange, setDateRange] = useState({
