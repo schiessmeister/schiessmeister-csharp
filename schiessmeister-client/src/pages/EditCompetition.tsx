@@ -2,7 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useData } from '../context/DataContext';
 import CreateCompetitionForm from './CreateCompetitionForm';
 
-const EditCompetition = () => {
+const EditCompetition: React.FC = () => {
   const { id } = useParams();
   const { competitions, updateCompetition } = useData();
   const navigate = useNavigate();
@@ -11,7 +11,7 @@ const EditCompetition = () => {
 
   if (!competition) return <div>Wettbewerb nicht gefunden</div>;
 
-  const handleSave = (comp) => {
+  const handleSave = (comp: Record<string, string>) => {
     updateCompetition(competition.id, comp);
     navigate(`/competitions/${competition.id}`);
   };

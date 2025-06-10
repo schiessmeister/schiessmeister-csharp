@@ -2,11 +2,11 @@ import { useNavigate } from 'react-router-dom';
 import { useData } from '../context/DataContext';
 import CreateCompetitionForm from './CreateCompetitionForm';
 
-const CreateCompetition = () => {
+const CreateCompetition: React.FC = () => {
   const { addCompetition } = useData();
   const navigate = useNavigate();
 
-  const handleSave = (comp) => {
+  const handleSave = (comp: Record<string, string>) => {
     addCompetition(comp);
     navigate('/competitions');
   };

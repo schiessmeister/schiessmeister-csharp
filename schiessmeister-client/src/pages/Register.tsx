@@ -6,14 +6,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
-const Register = () => {
+const Register: React.FC = () => {
 	const [username, setUsername] = useState('');
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
 	const { login } = useAuth();
 
-	const handleSubmit = async (e) => {
+        const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		setError('');
 
@@ -34,17 +34,17 @@ const Register = () => {
                         <form onSubmit={handleSubmit}>
                                 <div>
                                         <Label htmlFor="username">Username</Label>
-                                        <Input id="username" name="username" type="text" required placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
+                                        <Input id="username" name="username" type="text" required placeholder="Username" value={username} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)} />
                                 </div>
 
                                 <div>
                                         <Label htmlFor="email">Email</Label>
-                                        <Input id="email" name="email" type="email" required placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                                        <Input id="email" name="email" type="email" required placeholder="Email" value={email} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)} />
                                 </div>
 
                                 <div>
                                         <Label htmlFor="password">Passwort</Label>
-                                        <Input id="password" name="password" type="password" required placeholder="Passwort" value={password} onChange={(e) => setPassword(e.target.value)} />
+                                        <Input id="password" name="password" type="password" required placeholder="Passwort" value={password} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)} />
                                 </div>
 
                                 {error && <div>{error}</div>}

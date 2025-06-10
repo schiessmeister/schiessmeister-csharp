@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useData } from '../context/DataContext';
 import { Button } from '@/components/ui/button';
 
-const Competitions = () => {
+const Competitions: React.FC = () => {
   const { competitions } = useData();
 
   return (

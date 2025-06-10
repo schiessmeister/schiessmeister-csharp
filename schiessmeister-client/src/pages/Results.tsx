@@ -1,4 +1,4 @@
-const Results = () => {
+const Results: React.FC = () => {
   return (
     <main>
       <h2>Resultate</h2>
