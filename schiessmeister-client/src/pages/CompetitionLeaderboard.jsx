@@ -38,11 +38,6 @@ const CompetitionLeaderboard = () => {
 
   return (
     <main className="min-h-screen w-full px-4 py-10 bg-background">
-      <div className="mb-6">
-        <Button asChild variant="outline">
-          <Link to={`/manager/competitions/${id}`}>Zurück</Link>
-        </Button>
-      </div>
       <h2 className="text-3xl font-bold mb-8">Rangliste - {competition.name}</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
         {Object.entries(groups).map(([dis, classes]) => (
@@ -71,6 +66,11 @@ const CompetitionLeaderboard = () => {
             </div>
           ))
         ))}
+      </div>
+      <div className="flex justify-center mt-8">
+        <Button asChild variant="outline" className="w-auto px-8">
+          <Link to={`/manager/competitions/${id}`}>Zurück</Link>
+        </Button>
       </div>
     </main>
   );
